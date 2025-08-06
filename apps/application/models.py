@@ -1,0 +1,88 @@
+from django.db import models
+from django.utils.translation import gettext_lazy as _
+from apps.user.models import User
+
+
+
+
+class Manufacturer(models.Model): 
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_("Foydalanuvchi"))
+    company_name = models.CharField(max_length=255, verbose_name=_("Kompaniya nomi"))
+    market_experience = models.CharField(max_length=100, verbose_name=_("Bozor tajribasi"))
+    full_name = models.CharField(max_length=255, verbose_name=_("F.I.SH"))
+    position = models.CharField(max_length=100, verbose_name=_("Lavozim"))
+    min_order_quantity = models.CharField(max_length=100, verbose_name=_("Minimal buyurtma hajmi"))
+    product_segment = models.CharField(max_length=100, verbose_name=_("Maxsulot segmenti"))
+    commercial_offer_text = models.TextField(verbose_name=_("Tijorat taklifi"))
+    commercial_offer = models.FileField(
+        upload_to="offers/", 
+        verbose_name=_("Tijorat taklifi fayl"),
+        null=True, blank=True
+    )
+    production_address = models.TextField(verbose_name=_("Ishlab chiqarish manzili"))
+    office_address = models.TextField(verbose_name=_("Ofis manzili"))
+    website = models.CharField(
+        max_length=100, 
+        verbose_name=_("Sayt manzili"), 
+        blank=True, null=True
+    )
+    has_quality_control = models.BooleanField(
+        default=False, 
+        verbose_name=_("Sifat nazorati mavjudmi")
+    )
+    has_crm = models.BooleanField(default=False, verbose_name=_("CRM tizimi mavjudmi "))
+    has_erp = models.BooleanField(default=False, verbose_name=_("ERP tizimi mavjudmi"))
+    has_gemini_gerber = models.BooleanField(default=False, verbose_name=_("Gemini/Gerber mavjudmi"))
+    employee_count = models.IntegerField(verbose_name=_("Hodimlar soni"))
+    owns_building = models.BooleanField(verbose_name=_("Bino o‘zlariniki yoki ijaradami"))
+    has_power_issues = models.BooleanField(verbose_name=_("Elektr/gaz uzilishlari bormi"))
+    has_credit_load = models.BooleanField(verbose_name=_("Kredit yuki mavjudmi"))
+    organization_structure = models.TextField(verbose_name=_("Tashkilot tuzilmasi"))
+    equipment_info = models.TextField(verbose_name=_("Uskunalar haqida ma'lumot"))
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.full_name} - {self.user.telegram_id}"
+    
+    class Meta:
+        verbose_name = _("Ishlab chiqaruvchi")
+        verbose_name_plural = _("Ishlab chiqaruvchilar")
+
+
+
+class Customer(models.Model): 
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_("Foydalanuvchi"))
+    full_name = models.CharField(max_length=255, verbose_name=_("F.I.SH"))
+    position = models.CharField(max_length=100, verbose_name=_("Lavozim"))
+    company_name = models.CharField(max_length=255, verbose_name=_("Kompaniya nomi"))
+    website = models.CharField(blank=True, null=True, verbose_name=_("Sayt manzili"))
+    legal_address = models.TextField(verbose_name=_("Yuridik manzil"))
+    marketplace_brand = models.CharField(
+        max_length=255, 
+        verbose_name=_("Marketplace-lardagi brendi")
+    )
+    annual_order_volume = models.CharField(
+        max_length=100, 
+        verbose_name=_("Yillik buyurtmalar hajmi")
+    )
+    segment = models.CharField(max_length=100, verbose_name=_("Segment"))
+    cooperation_terms = models.CharField(
+        max_length=250, 
+        verbose_name=_("Hamkorlik shartlari (Incoterms)")
+    )
+    payment_terms = models.CharField(max_length=250, verbose_name=_("To‘lov shartlari"))
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+    def __str__(self):
+        return f"{self.full_name}"
+    
+
+    class Meta:
+        verbose_name = _("Buyurtmachi")
+        verbose_name_plural = _("Buyurtmachilar")
+            
+
+
+
+

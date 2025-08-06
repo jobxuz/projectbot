@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django migrations
+**/migrations/
+!*/migrations/__init__.py
+
+# SQLite
+*.sqlite3
+
+# PostgreSQL local backup
+*.dump
+*.sql
+
+# Environments
+.env
+.env.*
+
+# VSCode
+.vscode/
+
+# PyCharm
+.idea/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Static & media (agar ularni Git’da saqlamoqchi bo‘lmasangiz)
+staticfiles/
+media/
+
+# Coverage / testing
+htmlcov/
+.coverage
+.tox/
+.nox/
+.pytest_cache/
+
+# Docker
+*.pid
+*.tar
+docker-compose.override.yml
+
+# Virtual environment
+venv/
+ENV/
+env/
