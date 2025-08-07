@@ -33,6 +33,7 @@ __pycache__/
 # Static & media (agar ularni Git’da saqlamoqchi bo‘lmasangiz)
 staticfiles/
 media/
+static/
 
 # Coverage / testing
 htmlcov/

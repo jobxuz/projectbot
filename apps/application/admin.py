@@ -7,9 +7,11 @@ from .models import Manufacturer, Customer
 class ManufacturerAdmin(admin.ModelAdmin):
     list_display = ("id", "full_name", "company_name", "position") 
     search_fields = ("full_name", "company_name")
+    list_display_links = ("id", "full_name")
 
 
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ("id", "full_name", "company_name", "position") 
     search_fields = ("full_name", "company_name") 
+    list_display_links = ("id", "full_name")
