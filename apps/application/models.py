@@ -6,6 +6,10 @@ from apps.user.models import User
 
 
 class Manufacturer(models.Model): 
+    class StatusChoices(models.TextChoices):
+        IN_PROGRESS = "in_progress", _("Jarayonda")
+        APPROVED = "approved", _("Tasdiqlandi")
+        PAID = "paid", _("To‘lov qilindi")
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_("Foydalanuvchi"))
     company_name = models.CharField(max_length=255, verbose_name=_("Kompaniya nomi"))
     market_experience = models.CharField(max_length=100, verbose_name=_("Bozor tajribasi"))
@@ -45,6 +49,12 @@ class Manufacturer(models.Model):
         null=True, blank=True
     )
     phone = models.CharField(max_length=30, null=True, blank=True)
+    status = models.CharField(
+        max_length=20,
+        choices=StatusChoices.choices,
+        default=StatusChoices.IN_PROGRESS,
+        verbose_name=_("Holat")
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -92,4 +102,52 @@ class Customer(models.Model):
 
 
 
+class AdditionalService(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    is_active = models.BooleanField(default=True, verbose_name=_("Faolmi"))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Yaratilgan vaqti"))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Yangilangan vaqti"))
 
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _("Qo'shimcha xizmat")
+        verbose_name_plural = _("Qo'shimcha xizmatlar")
+        ordering = ["-created_at"]
+    
+
+
+class ApplicationAdditionalService(models.Model):
+    class StatusChoices(models.TextChoices):
+        IN_PROGRESS = "in_progress", _("Jarayonda")
+        APPROVED = "approved", _("Tasdiqlandi")
+        PAID = "paid", _("To‘lov qilindi")
+
+    manufacturer = models.ForeignKey(
+        Manufacturer,
+        on_delete=models.CASCADE,
+        related_name="service_requests"
+    )
+    service = models.ForeignKey(
+        AdditionalService,
+        on_delete=models.CASCADE,
+        related_name="service_requests"
+    )
+    status = models.CharField(
+        max_length=20,
+        choices=StatusChoices.choices,
+        default=StatusChoices.IN_PROGRESS,
+        verbose_name=_("Holat")
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("manufacturer", "service")
+        verbose_name = _("Qo‘shimcha xizmat arizasi")
+        verbose_name_plural = _("Qo‘shimcha xizmat arizalari")
+
+    def __str__(self):
+        return f"{self.manufacturer.company_name}"

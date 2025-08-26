@@ -91,16 +91,40 @@ UNFOLD = {
                 "separator": True,
                 "items": [
                     {
-                        "title": _("Manufacturers"),
+                        "title": _("Ishlab chiqaruvchi"),
                         "icon": "factory",
                         "link": reverse_lazy("admin:application_manufacturer_changelist"),
                     },
                     {
-                        "title": _("Customers"),
+                        "title": _("Buyurtmachi"),
                         "icon": "people",
                         "link": reverse_lazy("admin:application_customer_changelist"),
                     },
                 ]
+            },
+            # ApplicationAdditionalService
+            {
+                "title": _("Application Additional Service"),
+                "separator": True,
+                "items": [
+                    {
+                        "title": _("Qo‘shimcha xizmat arizasi"),
+                        "icon": "package",
+                        "link": reverse_lazy("admin:application_applicationadditionalservice_changelist"),
+                    },
+                ],
+            },
+            # Services
+            {
+                "title": _("Additional Services"),
+                "separator": True,
+                "items": [
+                    {
+                        "title": _("Qo'shimcha xizmat"),
+                        "icon": "package",
+                        "link": reverse_lazy("admin:application_additionalservice_changelist"),
+                    },
+                ],
             },
         ],
     },
