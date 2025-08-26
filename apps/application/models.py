@@ -39,6 +39,12 @@ class Manufacturer(models.Model):
     has_credit_load = models.BooleanField(verbose_name=_("Kredit yuki mavjudmi"))
     organization_structure = models.TextField(verbose_name=_("Tashkilot tuzilmasi"))
     equipment_info = models.TextField(verbose_name=_("Uskunalar haqida ma'lumot"))
+    certificate = models.FileField(
+        upload_to="offers/", 
+        verbose_name=_("Sertificat"),
+        null=True, blank=True
+    )
+    phone = models.CharField(max_length=30, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -71,6 +77,7 @@ class Customer(models.Model):
         verbose_name=_("Hamkorlik shartlari (Incoterms)")
     )
     payment_terms = models.CharField(max_length=250, verbose_name=_("To‘lov shartlari"))
+    phone = models.CharField(max_length=30, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
 
