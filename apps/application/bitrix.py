@@ -5,9 +5,9 @@ import itertools
 class Bitrix24:
 
     def __init__(self):
-        domain = "usatportal.uz"
-        token = "pivp057rczzuq9cr"
-        self.base_url = f"https://crm.{domain}/rest/10/{token}/"
+        domain = "b24-v50vg5.bitrix24.ru"
+        token = "r32riacvswxtgbu1"
+        self.base_url = f"https://{domain}/rest/1/{token}/"
 
 
     def _request(self, method = "GET", payload = None, headers = None, params = None,  bitrix_method = None):

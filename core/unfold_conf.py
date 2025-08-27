@@ -126,6 +126,18 @@ UNFOLD = {
                     },
                 ],
             },
+            # Tempory contact
+            {
+                "title": _("Temporary Contact"),
+                "separator": True,
+                "items": [
+                    {
+                        "title": _("Temporary Contact"),
+                        "icon": "package",
+                        "link": reverse_lazy("admin:application_temporarycontact_changelist"),
+                    },
+                ],
+            },
         ],
     },
     "TABS": [

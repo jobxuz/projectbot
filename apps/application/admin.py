@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Manufacturer, Customer, AdditionalService, ApplicationAdditionalService
+from .models import Manufacturer, Customer, AdditionalService, ApplicationAdditionalService, TemporaryContact
 
 
 
@@ -38,3 +38,11 @@ class ApplicationAdditionalServiceAdmin(admin.ModelAdmin):
     )
     list_filter = ("status",)
     list_display_links = ("id", "manufacturer")
+
+
+
+@admin.register(TemporaryContact)
+class TemporaryContactAdmin(admin.ModelAdmin):
+    list_display = ("id", "phone_number", "contact_id", "deal_id", "created_at") 
+    search_fields = ("phone_number",)
+    list_display_links = ("id", "phone_number")

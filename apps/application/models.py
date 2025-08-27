@@ -151,3 +151,19 @@ class ApplicationAdditionalService(models.Model):
 
     def __str__(self):
         return f"{self.manufacturer.company_name}"
+
+
+
+
+class TemporaryContact(models.Model):
+    phone_number = models.CharField(verbose_name=_("Phone number"), max_length=128)
+    contact_id = models.CharField(verbose_name=_("Contact ID"), max_length=128, null=True, blank=True)
+    deal_id = models.CharField(verbose_name=_("Deal ID"), max_length=128, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+    def __str__(self):
+        return self.phone_number
+
+    class Meta:
+        verbose_name = _("Temporary contact")
+        verbose_name_plural = _("Temporary contacts")
