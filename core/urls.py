@@ -21,6 +21,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.conf import settings
 from django.conf.urls.static import static
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 
 
@@ -50,6 +51,10 @@ urlpatterns = [
 
     # YAML schema
     re_path(r'^swagger\.yaml$', schema_view.without_ui(cache_timeout=0), name='schema-yaml'),
+
+    path("api/schema/", SpectacularAPIView.as_view(), name="api-schema"),
+    path("docs/", SpectacularSwaggerView.as_view(url_name="api-schema"), name="api-docs"),
+    path("redocs/", SpectacularRedocView.as_view(url_name="api-schema"), name="api-redocs"),
 
 ]
 
