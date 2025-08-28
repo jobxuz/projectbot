@@ -8,16 +8,17 @@ from django.contrib.auth import authenticate
 from .serializers import UserSerializer
 from ...models import User
 from .serializers import RegisterSerializer
+from drf_spectacular.utils import extend_schema
 
 
-
+@extend_schema(tags=["Auth"])
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = RegisterSerializer
     permission_classes = [AllowAny]
 
 
-
+@extend_schema(tags=["Auth"])
 class LoginView(generics.GenericAPIView):
     serializer_class = LoginSerializer
     permission_classes = [AllowAny]
@@ -39,7 +40,7 @@ class LoginView(generics.GenericAPIView):
 
 
 
-
+@extend_schema(tags=["Auth"])
 class LogoutView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
