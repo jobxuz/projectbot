@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 
     "apps.user",
     "apps.application",
+    "apps.bot",
 
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
@@ -183,3 +184,7 @@ CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = "Asia/Tashkent"
+
+# Bot Configuration
+BOT_TOKEN = env("BOT_TOKEN")
+BOT_HOST = env("BOT_HOST")

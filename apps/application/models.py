@@ -1,8 +1,22 @@
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from apps.user.models import User
 
+class UserType(models.TextChoices):
+    MANUFACTURER = "manufacturer", _("Ishlab chiqaruvchi")
+    CUSTOMER = "customer", _("Buyurtmachi")
 
+class BotUser(models.Model):
+    telegram_id = models.BigIntegerField(unique=True, null=True, blank=True)
+    first_name = models.CharField(max_length=150, null=True, blank=True)
+    last_name = models.CharField(max_length=150, null=True, blank=True)
+    username = models.CharField(max_length=150, null=True, blank=True)
+    phone_number = models.CharField(max_length=20, null=True, blank=True)
+    language_code = models.CharField(max_length=10, null=True, blank=True)
+    is_bot = models.BooleanField(default=False, null=True, blank=True)
+    created_at = models.DateTimeField(default=timezone.now)
+    type = models.CharField(max_length=20, choices=UserType.choices, default=UserType.CUSTOMER)
 
 
 class Manufacturer(models.Model): 
@@ -10,7 +24,7 @@ class Manufacturer(models.Model):
         IN_PROGRESS = "in_progress", _("Jarayonda")
         APPROVED = "approved", _("Tasdiqlandi")
         PAID = "paid", _("To‘lov qilindi")
-    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_("Foydalanuvchi"))
+    user = models.OneToOneField(BotUser, on_delete=models.CASCADE, verbose_name=_("Foydalanuvchi"))
     company_name = models.CharField(max_length=255, verbose_name=_("Kompaniya nomi"))
     market_experience = models.CharField(max_length=100, verbose_name=_("Bozor tajribasi"))
     full_name = models.CharField(max_length=255, verbose_name=_("F.I.SH"))
@@ -67,7 +81,7 @@ class Manufacturer(models.Model):
 
 
 class Customer(models.Model): 
-    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_("Foydalanuvchi"))
+    user = models.OneToOneField(BotUser, on_delete=models.CASCADE, verbose_name=_("Foydalanuvchi"))
     full_name = models.CharField(max_length=255, verbose_name=_("F.I.SH"))
     position = models.CharField(max_length=100, verbose_name=_("Lavozim"))
     company_name = models.CharField(max_length=255, verbose_name=_("Kompaniya nomi"))
@@ -98,8 +112,6 @@ class Customer(models.Model):
     class Meta:
         verbose_name = _("Buyurtmachi")
         verbose_name_plural = _("Buyurtmachilar")
-            
-
 
 
 class AdditionalService(models.Model):
@@ -107,8 +119,11 @@ class AdditionalService(models.Model):
     description = models.TextField(blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     is_active = models.BooleanField(default=True, verbose_name=_("Faolmi"))
+    type = models.CharField(max_length=20, choices=UserType.choices, default=UserType.CUSTOMER)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Yaratilgan vaqti"))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Yangilangan vaqti"))
+    order = models.IntegerField(default=0, verbose_name=_("Tartib raqami"))
+    is_apply = models.BooleanField(default=False, verbose_name=_("Qo'llab-quvvatlanadi"))
 
     def __str__(self):
         return self.name
@@ -116,7 +131,7 @@ class AdditionalService(models.Model):
     class Meta:
         verbose_name = _("Qo'shimcha xizmat")
         verbose_name_plural = _("Qo'shimcha xizmatlar")
-        ordering = ["-created_at"]
+        ordering = ["order"]
     
 
 
