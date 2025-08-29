@@ -7,6 +7,7 @@ import asyncio
 
 from apps.bot.handlers.echo import echo_router
 from apps.bot.handlers.start import start_router
+from apps.bot.handlers.notification import notification_router
 
 # Global instances
 _dp = None
@@ -22,6 +23,7 @@ def get_dispatcher_and_bot() -> (Dispatcher, Bot):
         _dp.include_routers(
             start_router,
             echo_router,
+            notification_router,
         )
         
         _bot = Bot(token=settings.BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))

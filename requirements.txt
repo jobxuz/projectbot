@@ -1,55 +1,54 @@
-aiofiles==24.1.0
-aiogram==3.21.0
-aiohappyeyeballs==2.6.1
-aiohttp==3.12.15
-aiosignal==1.4.0
-amqp==5.3.1
-annotated-types==0.7.0
-asgiref==3.9.1
-async-timeout==5.0.1
-attrs==25.3.0
-billiard==4.2.1
-celery==5.5.3
-certifi==2025.8.3
-charset-normalizer==3.4.3
-click==8.2.1
-click-didyoumean==0.3.1
-click-plugins==1.1.1.2
-click-repl==0.3.0
+# Django va asosiy framework
 Django==5.2.4
+djangorestframework==3.16.0
+djangorestframework-simplejwt==5.5.1
+django-cors-headers==4.4.0
+django-filter==23.5
 django-redis==6.0.0
 django-unfold==0.63.0
-djangorestframework==3.16.0
-djangorestframework_simplejwt==5.5.1
-drf-yasg==1.21.10
-frozenlist==1.7.0
-idna==3.10
-inflection==0.5.1
-kombu==5.5.4
-magic-filter==1.0.12
-multidict==6.6.3
-packaging==25.0
-prompt_toolkit==3.0.51
-propcache==0.3.2
+drf-spectacular==0.27.2
+
+# Database
 psycopg2-binary==2.9.10
-pydantic==2.11.7
-pydantic_core==2.33.2
-PyJWT==2.10.1
-python-dateutil==2.9.0.post0
+
+# Telegram Bot
+aiogram==3.21.0
+
+# Celery va Redis
+celery==5.5.3
+redis==5.2.1
+
+# HTTP va API
+requests==2.32.4
+aiohttp==3.12.15
+aiofiles==24.1.0
+
+# Environment va config
 python-environ==0.4.54
+
+# Image processing
+# Pillow==10.2.0
+
+# JWT va authentication
+PyJWT==2.10.1
+
+# Validation va serialization
+pydantic==2.11.7
+pydantic-core==2.33.2
+
+# Utilities
+python-dateutil==2.9.0.post0
 pytz==2025.2
 PyYAML==6.0.2
-redis==5.2.1
-requests==2.32.4
-six==1.17.0
-sqlparse==0.5.3
+
+# Development va deployment
+gunicorn==21.2.0
+whitenoise==6.6.0
+
+# Async support
+typing-extensions==4.14.1
 typing-inspection==0.4.1
-typing_extensions==4.14.1
-tzdata==2025.2
-uritemplate==4.2.0
-urllib3==2.5.0
-vine==5.1.0
-wcwidth==0.2.13
-yarl==1.20.1
-drf-spectacular==0.27.2
-django-cors-headers==4.4.0
+
+# Other dependencies
+inflection==0.5.1
+magic-filter==1.0.12

@@ -9,4 +9,7 @@ class ManufacturerCreateSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-    
+class ManufacturerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Manufacturer
+        fields = "__all__"

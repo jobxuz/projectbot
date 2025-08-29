@@ -1,7 +1,7 @@
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics
 
-from apps.application.models import Customer
+from apps.application.models import Customer, Manufacturer
 from .serializers import CustomerCreateSerializer
 
 

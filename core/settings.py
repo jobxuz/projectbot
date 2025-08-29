@@ -48,7 +48,6 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
-    'drf_yasg',
     "drf_spectacular",
 ]
 
@@ -188,3 +187,20 @@ CELERY_TIMEZONE = "Asia/Tashkent"
 # Bot Configuration
 BOT_TOKEN = env("BOT_TOKEN")
 BOT_HOST = env("BOT_HOST")
+
+# Telegram Bot sozlamalari
+TELEGRAM_BOT_TOKEN = env('TELEGRAM_BOT_TOKEN', default='')
+TELEGRAM_WEBHOOK_URL = env('TELEGRAM_WEBHOOK_URL', default='')
+WEBAPP_URL = env('WEBAPP_URL', default='https://uztextil.vercel.app')
+
+# To'lov tizimi sozlamalari
+CLICK_SERVICE_ID = env('CLICK_SERVICE_ID', default='')
+CLICK_SECRET_KEY = env('CLICK_SECRET_KEY', default='')
+PAYME_MERCHANT_ID = env('PAYME_MERCHANT_ID', default='')
+PAYME_SECRET_KEY = env('PAYME_SECRET_KEY', default='')
+VISA_MERCHANT_ID = env('VISA_MERCHANT_ID', default='')
+VISA_SECRET_KEY = env('VISA_SECRET_KEY', default='')
+
+# Bitrix24 CRM sozlamalari
+BITRIX24_WEBHOOK_URL = env('BITRIX24_WEBHOOK_URL', default='')
+BITRIX24_ACCESS_TOKEN = env('BITRIX24_ACCESS_TOKEN', default='')
