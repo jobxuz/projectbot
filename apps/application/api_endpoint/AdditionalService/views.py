@@ -1,4 +1,4 @@
-from django.db.models import Exists
+from django.db.models import Exists, OuterRef
 from drf_spectacular.utils import extend_schema
 from rest_framework.generics import ListAPIView, CreateAPIView
 
@@ -22,10 +22,10 @@ class AdditionalServiceListAPIView(ListAPIView):
         if is_active and is_active in ['true', 'false']:
             queryset = queryset.filter(is_active=is_active)
 
-        telegram_id = self.request.query_params.get('telegram_id')
+        telegram_id = self.kwargs.get('telegram_id')
         if telegram_id:
             queryset = queryset.annotate(
-                is_apply=Exists(UserApply.objets.filter(service_id=OuterRef('id'), user_telegram_id=telegram_id))
+                is_apply=Exists(UserApply.objects.filter(service_id=OuterRef('id'), user__telegram_id=telegram_id))
             )
         return queryset
 

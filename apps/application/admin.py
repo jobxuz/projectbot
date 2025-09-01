@@ -21,8 +21,9 @@ class CustomerAdmin(admin.ModelAdmin):
 
 @admin.register(AdditionalService)
 class AdditionalServiceAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "price", "is_active", "created_at") 
+    list_display = ("id", "name", "price", "payment_type", "type", "is_active", "created_at") 
     search_fields = ("name",)
+    list_filter = ("payment_type", "type", "is_active")
     list_display_links = ("id", "name")
 
 
