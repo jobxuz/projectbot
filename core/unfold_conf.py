@@ -85,6 +85,17 @@ UNFOLD = {
                     },
                 ],
             },
+            {
+                "title": _("BotUser"),
+                "separator": True,
+                "items": [
+                    {
+                        "title": _("Bot Users"),
+                        "icon": "people",
+                        "link": reverse_lazy("admin:application_botuser_changelist"),
+                    },
+                ],
+            },
             # applications
             {
                 "title": _("Applications"),

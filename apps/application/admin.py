@@ -19,7 +19,7 @@ class CustomerAdmin(admin.ModelAdmin):
 
 
 @admin.register(BotUser)
-class CustomerAdmin(admin.ModelAdmin):
+class BotUserAdmin(admin.ModelAdmin):
     list_display = ("id", "telegram_id", "phone_number", "language_code") 
     search_fields = ("telegram_id", "phone_number") 
     list_display_links = ("id", "telegram_id")
