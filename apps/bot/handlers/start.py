@@ -22,7 +22,7 @@ async def command_start_handler(message: Message):
         parse_mode="HTML"
     )
     await message.answer_photo(
-        photo=FSInputFile("static/images/welcome.png"),
+        photo=FSInputFile("welcome.jpg"),
         caption="Faqat oraliqsiz, ishonchli fabrikalar.\nAgar shartlar bajarilmasa, pulni qaytarib\nberish kafolati mavjud",
         reply_markup=builder.as_markup(),
         parse_mode="HTML"

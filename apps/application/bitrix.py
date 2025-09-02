@@ -6,7 +6,7 @@ class Bitrix24:
 
     def __init__(self):
         domain = "b24-v50vg5.bitrix24.ru"
-        token = "r32riacvswxtgbu1"
+        token = "63h82dwr6zmy8xus"
         self.base_url = f"https://{domain}/rest/1/{token}/"
 
 
@@ -16,6 +16,7 @@ class Bitrix24:
         url = self.base_url + bitrix_method
 
         response = requests.request(method, url, json=payload, headers=headers, params=params)
+
 
         if response.ok:
             return response.json()

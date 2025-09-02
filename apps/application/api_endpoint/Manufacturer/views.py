@@ -1,6 +1,6 @@
 from rest_framework import generics
 from apps.application.models import Manufacturer
-from apps.application.tasks import notify_manufacturer_created
+from apps.application.tasks import notify_manufacturer_created, send_manufacturer_to_bitrix
 from .serializers import ManufacturerCreateSerializer, ManufacturerDetailSerializer, ManufacturerListSerializer
 from drf_spectacular.utils import extend_schema
 
@@ -13,7 +13,7 @@ class ManufacturerCreateAPIView(generics.CreateAPIView):
     def perform_create(self, serializer):
         manufacturer = serializer.save()
         # Celery taskni backgroundda chaqiramiz
-        notify_manufacturer_created.delay(manufacturer.id)
+        send_manufacturer_to_bitrix.delay(manufacturer.id)
 
 
 
