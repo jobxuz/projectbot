@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Manufacturer, Customer, AdditionalService, ApplicationAdditionalService, TemporaryContact
+from .models import Manufacturer, Customer, AdditionalService, ApplicationAdditionalService, TemporaryContact, BotUser
 
 
 
@@ -17,6 +17,12 @@ class CustomerAdmin(admin.ModelAdmin):
     search_fields = ("full_name", "company_name") 
     list_display_links = ("id", "full_name")
 
+
+@admin.register(BotUser)
+class CustomerAdmin(admin.ModelAdmin):
+    list_display = ("id", "telegram_id", "phone_number", "language_code") 
+    search_fields = ("telegram_id", "phone_number") 
+    list_display_links = ("id", "telegram_id")
 
 
 @admin.register(AdditionalService)
