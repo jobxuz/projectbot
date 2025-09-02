@@ -125,6 +125,16 @@ class ServiceType(models.TextChoices):
     MANUFACTURER = 'manufacturer'
 
 
+class ServiceOption(models.TextChoices):
+    VIDEO_REVIEW = "video_review", "Video sharh"
+    INVITE_MANAGER = "invite_manager", "Sotuv menejerini taklif qilish"
+    TRAINING_REPS = "training_reps", "ROPlarni o‘qitish"
+    PLACE_ORDER = "place_order", "Buyurtma joylashtirish"
+    SELECT_FACTORY = "select_factory", "Fabrika tanlash"
+    ONLINE_B2B = "online_b2b", "Online B2B"
+    CUSTOM_ORDER = "custom_order", "Tur buyurtma"
+
+
 class PaymentType(models.TextChoices):
     ONE_TIME = "one_time", _("1 martalik to'lov")
     MONTHLY = "monthly", _("Oylik to'lov")
@@ -132,6 +142,11 @@ class PaymentType(models.TextChoices):
 
 class AdditionalService(models.Model):
     type = models.CharField(max_length=20, choices=ServiceType.choices, default=ServiceType.CUSTOMER)
+    option = models.CharField(
+        max_length=100,
+        choices=ServiceOption.choices,
+        default=ServiceOption.VIDEO_REVIEW
+    )
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
