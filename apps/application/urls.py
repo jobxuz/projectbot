@@ -2,6 +2,7 @@ from django.urls import path
 
 from apps.application.api_endpoint.AdditionalService.views import AdditionalServiceListAPIView, AdditionalServiceApplyAPIView
 from apps.application.api_endpoint.ApplicationAdditionalService.views import ApplicationAdditionalServiceCreateAPIView
+from apps.application.api_endpoint.Slider.views import SliderListAPIView
 from .api_endpoint.Manufacturer.views import ManufacturerCreateAPIView, ManufacturerDetailAPIView, ManufacturerListAPIView
 from .api_endpoint.Customer.views import CustomerCreateAPIView
 from .api_endpoint.BotUser.views import BotUserRegisterAPIView
@@ -19,5 +20,6 @@ urlpatterns = [
     path("application/customer-create/", CustomerCreateAPIView.as_view(), name="customer"),
     path("application/manufacturer-list/", ManufacturerListAPIView.as_view(), name="manufacturer-list"),
     path("application/manufacturer-detail/<int:id>/", ManufacturerDetailAPIView.as_view(), name="manufacturer-detail"),
+    path('sliders/', SliderListAPIView.as_view(), name='slider-list'),
 
 ]

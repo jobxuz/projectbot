@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Manufacturer, Customer, AdditionalService, ApplicationAdditionalService, TemporaryContact, BotUser
+from .models import Manufacturer, Customer, AdditionalService, ApplicationAdditionalService, TemporaryContact, BotUser, Slider
 
 
 
@@ -53,3 +53,11 @@ class TemporaryContactAdmin(admin.ModelAdmin):
     list_display = ("id", "phone_number", "contact_id", "deal_id", "created_at") 
     search_fields = ("phone_number",)
     list_display_links = ("id", "phone_number")
+
+
+
+@admin.register(Slider)
+class SliderAdmin(admin.ModelAdmin):
+    list_display = ("id", "title", "is_active", "created_at", "updated_at") 
+    search_fields = ("title",)
+    list_display_links = ("id", "title")

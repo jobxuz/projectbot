@@ -218,3 +218,20 @@ class TemporaryContact(models.Model):
     class Meta:
         verbose_name = _("Temporary contact")
         verbose_name_plural = _("Temporary contacts")
+
+
+
+class Slider(models.Model):
+    title = models.CharField(max_length=255, verbose_name=_("Sarlavha"))
+    description = models.TextField(verbose_name=_("Tavsif"))
+    image = models.ImageField(upload_to='sliders/', verbose_name=_("Rasm"))
+    is_active = models.BooleanField(default=True, verbose_name=_("Faol"))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Yaratilgan sana"))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Yangilangan sana"))
+
+    class Meta:
+        verbose_name = _("Slayder")
+        verbose_name_plural = _("Slayderlar")
+
+    def __str__(self):
+        return self.title

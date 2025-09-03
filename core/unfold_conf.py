@@ -149,6 +149,18 @@ UNFOLD = {
                     },
                 ],
             },
+            # Slider
+            {
+                "title": _("Reklama"),
+                "separator": True,
+                "items": [
+                    {
+                        "title": _("Reklama"),
+                        "icon": "package",
+                        "link": reverse_lazy("admin:application_slider_changelist"),
+                    },
+                ],
+            },
         ],
     },
     "TABS": [
