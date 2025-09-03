@@ -154,7 +154,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_ALL_ORIGINS = True
 
 CSRF_TRUSTED_ORIGINS = [
-    "http://165.22.66.5",
+    "https://texttile.dclinics.uz",
     "http://localhost:3000",
     "http://localhost:5173",
 ]
@@ -163,12 +163,8 @@ SPECTACULAR_SETTINGS = {
     "TITLE": "Bot API",
     "DESCRIPTION": "Documentation of API endpoints of Bot",
     "VERSION": "1.0.0",
-    # "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
     "SERVE_PERMISSIONS": ["rest_framework.permissions.AllowAny"],
 }
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "static"
@@ -176,9 +172,6 @@ STATICFILES_DIRS = (BASE_DIR / "staticfiles",)
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
