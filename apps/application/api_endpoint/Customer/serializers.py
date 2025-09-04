@@ -8,3 +8,4 @@ class CustomerCreateSerializer(serializers.ModelSerializer):
         model = Customer
         fields = "__all__"
 
+
