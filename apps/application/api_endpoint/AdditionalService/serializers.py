@@ -8,7 +8,7 @@ class AdditionalServiceSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = AdditionalService
-        fields = ["id", "name", "description", "price", "is_apply"]
+        fields = ["id", "name", "description", "price", 'type', 'option', "is_apply"]
         
         
 class UserApplySerializer(serializers.ModelSerializer):

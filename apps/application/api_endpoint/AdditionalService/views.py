@@ -4,23 +4,24 @@ from rest_framework.generics import ListAPIView, CreateAPIView
 
 from apps.application.models import AdditionalService, UserApply
 from .serializers import AdditionalServiceSerializer, UserApplySerializer
+from rest_framework.filters import SearchFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 @extend_schema(tags=["Service"])
 class AdditionalServiceListAPIView(ListAPIView):
     queryset = AdditionalService.objects.filter(is_active=True)
     serializer_class = AdditionalServiceSerializer
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ['name']
+    filterset_fields = ['type', 'option']
 
     def get_queryset(self):
         queryset = super().get_queryset()
 
-        type = self.request.query_params.get('type')
-        if type and type in ['customer', 'manufacturer']:
-            queryset = queryset.filter(type=type)
-
-        is_active = self.request.query_params.get('is_active')
-        if is_active and is_active in ['true', 'false']:
-            queryset = queryset.filter(is_active=is_active)
+        # type = self.request.query_params.get('type')
+        # if type and type in ['customer', 'manufacturer']:
+        #     queryset = queryset.filter(type=type)
 
         telegram_id = self.kwargs.get('telegram_id')
         if telegram_id:
