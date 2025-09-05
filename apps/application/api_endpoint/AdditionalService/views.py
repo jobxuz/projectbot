@@ -18,11 +18,6 @@ class AdditionalServiceListAPIView(ListAPIView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-
-        # type = self.request.query_params.get('type')
-        # if type and type in ['customer', 'manufacturer']:
-        #     queryset = queryset.filter(type=type)
-
         telegram_id = self.kwargs.get('telegram_id')
         if telegram_id:
             queryset = queryset.annotate(
@@ -30,7 +25,7 @@ class AdditionalServiceListAPIView(ListAPIView):
             )
         return queryset
 
-
+@extend_schema(tags=["Service"])
 class AdditionalServiceApplyAPIView(CreateAPIView):
     queryset = UserApply.objects.all()
     serializer_class = UserApplySerializer

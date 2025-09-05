@@ -1,63 +1,159 @@
 from django.contrib import admin
-from .models import Manufacturer, Customer, AdditionalService, ApplicationAdditionalService, TemporaryContact, BotUser, Slider
+from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.models import Group
+from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
+from .models import (
+    Manufacturer, Customer, AdditionalService, Application, 
+    TemporaryContact, BotUser, Slider, Package, PackageItem, UserApply
+)
+
+admin.site.unregister(Group)
+
+admin.site.site_header = _("Администрация")
+admin.site.index_title = _("Панель управления")
 
 
 
 @admin.register(Manufacturer)
 class ManufacturerAdmin(admin.ModelAdmin):
-    list_display = ("id", "full_name", "company_name", "status") 
-    search_fields = ("full_name", "company_name")
-    list_filter = ("status",)
+    list_display = ("id", "full_name", "company_name", "status", "created_at") 
+    search_fields = ("full_name", "company_name", "phone")
+    list_filter = ("status", "created_at")
     list_display_links = ("id", "full_name")
+    readonly_fields = ("created_at", "updated_at")
+    
+    class Meta:
+        verbose_name = _("Производитель")
+        verbose_name_plural = _("Производители")
 
 
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ("id", "full_name", "company_name", "position") 
-    search_fields = ("full_name", "company_name") 
+    list_display = ("id", "full_name", "company_name", "position", "created_at") 
+    search_fields = ("full_name", "company_name", "phone") 
     list_display_links = ("id", "full_name")
+    readonly_fields = ("created_at", "updated_at")
+    
+    class Meta:
+        verbose_name = _("Заказчик")
+        verbose_name_plural = _("Заказчики")
 
 
 @admin.register(BotUser)
 class BotUserAdmin(admin.ModelAdmin):
-    list_display = ("id", "telegram_id", "phone_number", "language_code") 
-    search_fields = ("telegram_id", "phone_number") 
+    list_display = ("id", "telegram_id", "first_name", "last_name", "phone_number", "type", "is_active", "created_at") 
+    search_fields = ("telegram_id", "first_name", "last_name", "phone_number", "username") 
+    list_filter = ("type", "is_active", "is_bot", "created_at")
     list_display_links = ("id", "telegram_id")
+    readonly_fields = ("created_at",)
+    
+    class Meta:
+        verbose_name = _("Пользователь бота")
+        verbose_name_plural = _("Пользователи бота")
 
 
 @admin.register(AdditionalService)
 class AdditionalServiceAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "price", "payment_type", "type", "is_active", "created_at") 
-    search_fields = ("name",)
-    list_filter = ("payment_type", "type", "is_active")
+    list_display = ("id", "name", "price", "payment_type", "type", "is_active", "order", "created_at") 
+    search_fields = ("name", "description")
+    list_filter = ("payment_type", "type", "is_active", "created_at")
     list_display_links = ("id", "name")
+    readonly_fields = ("created_at", "updated_at")
+    list_editable = ("order", "is_active")
+    
+    class Meta:
+        verbose_name = _("Дополнительная услуга")
+        verbose_name_plural = _("Дополнительные услуги")
 
 
-
-
-@admin.register(ApplicationAdditionalService)
-class ApplicationAdditionalServiceAdmin(admin.ModelAdmin):
-    list_display = ("id", "manufacturer", "service", "status", "created_at") 
+@admin.register(Application)
+class ApplicationAdmin(admin.ModelAdmin):
+    list_display = ("id", "user", "manufacturer", "customer", "package", "status", "created_at") 
     search_fields = (
-        "manufacturer__company_name",  
-        "manufacturer__full_name",     
-        "service__name",             
+        "user__first_name", "user__last_name", "user__phone_number",
+        "manufacturer__company_name", "manufacturer__full_name",     
+        "customer__company_name", "customer__full_name",
+        "package__name", "service__name",             
     )
-    list_filter = ("status",)
-    list_display_links = ("id", "manufacturer")
+    list_filter = ("status", "created_at", "package__type")
+    list_display_links = ("id", "user")
+    autocomplete_fields = ("user", "manufacturer", "customer", "service", "package")
+    readonly_fields = ("created_at", "updated_at")
+    
+    class Meta:
+        verbose_name = _("Заявка")
+        verbose_name_plural = _("Заявки")
+    
 
+
+    
+
+class PackageItemInline(admin.TabularInline):
+    model = PackageItem
+    extra = 1
+    fields = ("name", "order")
+    ordering = ("order",)
+
+
+@admin.register(Package)
+class PackageAdmin(admin.ModelAdmin):
+    list_display = ("id", "name", "type", "order", "created_at")
+    search_fields = ("name",)
+    list_filter = ("type", "created_at")
+    list_display_links = ("id", "name")
+    readonly_fields = ("created_at", "updated_at")
+    list_editable = ("order",)
+    inlines = [PackageItemInline]
+    
+    class Meta:
+        verbose_name = _("Пакет")
+        verbose_name_plural = _("Пакеты")
 
 
 @admin.register(TemporaryContact)
 class TemporaryContactAdmin(admin.ModelAdmin):
     list_display = ("id", "phone_number", "contact_id", "deal_id", "created_at") 
-    search_fields = ("phone_number",)
+    search_fields = ("phone_number", "contact_id", "deal_id")
     list_display_links = ("id", "phone_number")
+    readonly_fields = ("created_at", "updated_at")
+    
+    class Meta:
+        verbose_name = _("Временный контакт")
+        verbose_name_plural = _("Временные контакты")
+
+
+@admin.register(UserApply)
+class UserApplyAdmin(admin.ModelAdmin):
+    list_display = ("id", "user", "service", "created_at")
+    search_fields = ("user__first_name", "user__last_name", "service__name")
+    list_filter = ("created_at", "service__type")
+    list_display_links = ("id", "user")
+    readonly_fields = ("created_at", "updated_at")
+    
+    class Meta:
+        verbose_name = _("Заявка пользователя")
+        verbose_name_plural = _("Заявки пользователей")
 
 
 
 @admin.register(Slider)
 class SliderAdmin(admin.ModelAdmin):
     list_display = ("id", "title", "is_active", "created_at", "updated_at") 
-    search_fields = ("title",)
+    search_fields = ("title", "description")
+    list_filter = ("is_active", "created_at")
     list_display_links = ("id", "title")
+    readonly_fields = ("created_at", "updated_at")
+    list_editable = ("is_active",)
+    
+    class Meta:
+        verbose_name = _("Слайдер")
+        verbose_name_plural = _("Слайдеры")
+
+
+# Organize admin apps
+from django.apps import AppConfig
+
+class ApplicationConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'apps.application'
+    verbose_name = _('UzTextile Application')
