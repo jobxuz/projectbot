@@ -3,5 +3,5 @@ from .views import PackageListAPIView, PackageDetailAPIView
 
 urlpatterns = [
     path("list/", PackageListAPIView.as_view()),
-    path("detail/<int:id>/", PackageDetailAPIView.as_view()),
+    path("detail/<int:pk>/", PackageDetailAPIView.as_view()),
 ]
