@@ -18,4 +18,4 @@ class ApplicationListAPIView(ListAPIView):
     queryset = Application.objects.all()
     serializer_class = ApplicationListSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['status', 'created_at', 'package__type']
+    filterset_fields = ['status', 'created_at']

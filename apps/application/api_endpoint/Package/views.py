@@ -13,7 +13,6 @@ class PackageListAPIView(ListAPIView):
     queryset = Package.objects.all()
     serializer_class = PackageListSerializer
     filter_backends = [OrderingFilter, DjangoFilterBackend]
-    filterset_fields = ['type']
     ordering_fields = ['order']
 
 @extend_schema(tags=["Package"])
