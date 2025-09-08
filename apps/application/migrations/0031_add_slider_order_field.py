@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("application", "0029_add_slider_order_and_package_description"),
+        ("application", "0030_merge_20250908_0401"),
     ]
 
     operations = [
