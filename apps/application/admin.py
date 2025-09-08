@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import Group
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 from .models import (
-    Manufacturer, Customer, AdditionalService, Application, 
+    Manufacturer, Customer, AdditionalService, Application, Offer, 
     TemporaryContact, BotUser, Slider, Package, PackageItem, UserApply
 )
 
@@ -66,6 +66,13 @@ class AdditionalServiceAdmin(admin.ModelAdmin):
         verbose_name_plural = _("Дополнительные услуги")
 
 
+
+class OfferInline(admin.TabularInline):
+    model = Offer
+    extra = 1    
+    fields = ("user", "manufacturer", "customer", "service", "status")
+
+
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
     list_display = ("id", "user", "manufacturer", "customer", "package", "status", "created_at") 
@@ -79,6 +86,7 @@ class ApplicationAdmin(admin.ModelAdmin):
     list_display_links = ("id", "user")
     autocomplete_fields = ("user", "manufacturer", "customer", "service", "package")
     readonly_fields = ("created_at", "updated_at")
+    inlines = [OfferInline]
     
     class Meta:
         verbose_name = _("Заявка")
