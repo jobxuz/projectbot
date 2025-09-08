@@ -285,3 +285,52 @@ class Slider(BaseModel):
 
     def __str__(self):
         return self.title
+
+
+
+
+class Offer(BaseModel):
+    class StatusChoices(models.TextChoices):
+        CHOSEN = "chosen", _("Выбран")          
+        NOT_CHOSEN = "not_chosen", _("Не выбран")  
+
+    user = models.ForeignKey(
+        BotUser, 
+        on_delete=models.CASCADE, 
+        verbose_name=_("Пользователь")
+    )
+    application = models.ForeignKey(
+        Application, 
+        on_delete=models.CASCADE, 
+        null=True, 
+        blank=True,
+    )
+    manufacturer = models.ForeignKey(
+        Manufacturer, 
+        on_delete=models.CASCADE,  
+        null=True, 
+        blank=True,
+    )
+    customer = models.ForeignKey(
+        Customer, 
+        on_delete=models.CASCADE,
+        null=True, 
+        blank=True,
+    )
+    service = models.ForeignKey(
+        AdditionalService, 
+        on_delete=models.CASCADE,)
+    
+    status = models.CharField(
+        max_length=20,
+        choices=StatusChoices.choices,
+        default=StatusChoices.NOT_CHOSEN,
+        verbose_name=_("Статус")
+    )
+
+    def __str__(self):
+        return f"{self.user.telegram_id}"
+
+    class Meta:
+        verbose_name = _("Оффер")
+        verbose_name_plural = _("Офферы")
