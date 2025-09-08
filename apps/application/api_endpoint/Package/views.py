@@ -1,6 +1,7 @@
+from django.db.models import Prefetch
 from drf_spectacular.utils import extend_schema
 
-from apps.application.models import Package
+from apps.application.models import Package, PackageItem
 from .serializers import PackageListSerializer, PackageDetailSerializer
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from django_filters.rest_framework import DjangoFilterBackend
@@ -17,5 +18,10 @@ class PackageListAPIView(ListAPIView):
 
 @extend_schema(tags=["Package"])
 class PackageDetailAPIView(RetrieveAPIView):
-    queryset = Package.objects.prefetch_related('package_items').all()
+    queryset = Package.objects.prefetch_related(
+        Prefetch(
+            lookup='package_items', 
+            queryset=PackageItem.objects.all(),
+            to_attr="items")
+        ).all()
     serializer_class = PackageDetailSerializer

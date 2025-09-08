@@ -75,7 +75,7 @@ class ApplicationAdmin(admin.ModelAdmin):
         "customer__company_name", "customer__full_name",
         "package__name", "service__name",             
     )
-    list_filter = ("status", "created_at", "package__type")
+    list_filter = ("status", "created_at")
     list_display_links = ("id", "user")
     autocomplete_fields = ("user", "manufacturer", "customer", "service", "package")
     readonly_fields = ("created_at", "updated_at")
@@ -97,9 +97,9 @@ class PackageItemInline(admin.TabularInline):
 
 @admin.register(Package)
 class PackageAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "type", "order", "created_at")
+    list_display = ("id", "name", "order", "created_at")
     search_fields = ("name",)
-    list_filter = ("type", "created_at")
+    list_filter = ("created_at", )
     list_display_links = ("id", "name")
     readonly_fields = ("created_at", "updated_at")
     list_editable = ("order",)

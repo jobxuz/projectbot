@@ -182,15 +182,10 @@ class UserApply(BaseModel):
         verbose_name = _("Заявка пользователя")
         verbose_name_plural = _("Заявки пользователей")
         
-class PackageType(models.TextChoices):
-        START = "start", _("Старт - Базовый пакет")
-        GROWTH = "growth", _("Рост - Продвинутый пакет")
-        EXPORT = "export", _("Экспорт - Максимальный пакет")
-        
 class Package(BaseModel):
     name = models.CharField(max_length=255, verbose_name=_("Название"))
+    description = models.TextField(verbose_name=_("Описание"), null=True, blank=True)
     banner = models.ImageField(upload_to='packages/', verbose_name=_("Баннер"), null=True, blank=True)
-    type = models.CharField(max_length=20, choices=PackageType.choices, default=PackageType.START, verbose_name=_("Тип пакета"))
     order = models.IntegerField(default=0, verbose_name=_("Порядковый номер"))
     
     class Meta:
