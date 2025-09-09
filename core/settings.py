@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     # "unfold.contrib.import_export",
     # "unfold.contrib.guardian",
     # "unfold.contrib.simple_history",
+    "jazzmin",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -185,3 +186,15 @@ CELERY_TIMEZONE = "Asia/Tashkent"
 # Bot Configuration
 BOT_TOKEN = env("BOT_TOKEN")
 BOT_HOST = env("BOT_HOST")
+
+
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Администратор TextileBot",
+    "site_header": "TextileBot",
+    "site_brand": "TextileBot",
+    "welcome_sign": "Добро пожаловать!",
+    "copyright": "TextileBot",
+    "show_ui_builder": True,
+    "theme": "slate", 
+}
