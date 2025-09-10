@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -5,8 +6,9 @@ from rest_framework.permissions import AllowAny
 
 from apps.application.models import BotUser, Customer, Manufacturer
 from .serializers import BotUserRegisterSerializer
-from .serializers import UserInfoSerializer
+from rest_framework.exceptions import ValidationError
 
+@extend_schema(tags=["BotUser"])
 class BotUserRegisterAPIView(APIView):
     serializer_class = BotUserRegisterSerializer
     permission_classes = [AllowAny]
@@ -38,17 +40,51 @@ class BotUserRegisterAPIView(APIView):
             'customer': customer.id if customer else None,
             "manufacturer": manufacturer.id if manufacturer else None
         }, status=status.HTTP_201_CREATED)
-
-class UserInfo(APIView):
-    serializer_class = UserInfoSerializer
+        
+@extend_schema(tags=["BotUser"],
+               parameters=[
+            OpenApiParameter(
+                name='type',
+                description="Type of user to delete",
+                type=OpenApiTypes.STR,
+                enum=['customer', 'manufacturer', 'both'],
+                required=True
+            )
+        ])
+class DeleteAccountAPIView(APIView):
     permission_classes = [AllowAny]
 
-    def get(self, request, *args, **kwargs):
-        telegram_id = kwargs.get('telegram_id')
-        user = BotUser.objects.filter(telegram_id=telegram_id).first()
+    def delete(self, request, user_id, *args, **kwargs):
+        type = request.query_params.get('type')
+        if not type in ['customer', 'manufacturer', 'both']:
+            raise ValidationError("type is not valid")
         
-        if not user:
-            return Response({"error": "Foydalanuvchi topilmadi"}, status=status.HTTP_404_NOT_FOUND)
+        user = BotUser.objects.filter(id=user_id).first()
+        if user is None:
+            raise ValidationError("User does not found")
         
-        serializer = UserInfoSerializer(user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        customer = getattr(user, 'customer', None)
+        manufacturer = getattr(user, 'manufacturer', None)
+        
+        if type == 'customer' and not customer:
+            return Response({
+                'success': False,
+                'message': 'User is not a customer'
+            }, status=status.HTTP_400_BAD_REQUEST)
+            
+        if type == 'manufacturer' and not manufacturer:
+            return Response({
+                'success': False,
+                'message': 'User is not a manufacturer'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        user.delete()
+        
+        return Response({
+            'success': True,
+            'message': 'Account successfully deleted',
+            'deleted_customer': customer is not None,
+            'deleted_manufacturer': manufacturer is not None
+        }, status=status.HTTP_200_OK)
+            
+        
