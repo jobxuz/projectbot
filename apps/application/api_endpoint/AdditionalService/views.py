@@ -18,7 +18,7 @@ class AdditionalServiceListAPIView(ListAPIView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        telegram_id = self.kwargs.get('telegram_id')
+        telegram_id = self.request.query_params.get('telegram_id')
         if telegram_id:
             queryset = queryset.annotate(
                 is_apply=Exists(UserApply.objects.filter(service_id=OuterRef('id'), user__telegram_id=telegram_id))
