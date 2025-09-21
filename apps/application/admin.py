@@ -2,8 +2,10 @@ from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import Group
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
+
+from apps.application.utils import send_telegram_message
 from .models import (
-    Manufacturer, Customer, AdditionalService, Application, Offer, 
+    Manufacturer, Customer, AdditionalService, Application, Offer, Segment, 
     TemporaryContact, BotUser, Slider, Package, PackageItem, UserApply
 )
 
@@ -71,7 +73,7 @@ class OfferInline(admin.TabularInline):
     model = Offer
     extra = 1    
     fields = ("user", "manufacturer", "customer", "service", "status")
-
+    
 
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
@@ -91,6 +93,20 @@ class ApplicationAdmin(admin.ModelAdmin):
     class Meta:
         verbose_name = _("Заявка")
         verbose_name_plural = _("Заявки")
+
+    def save_model(self, request, obj, form, change):
+        if change:  
+            old_obj = Application.objects.get(pk=obj.pk)
+            if old_obj.status != obj.status:
+                chat_id = getattr(obj.user, "telegram_id", None)
+                if chat_id:
+                    message = (
+                        f"📌 Ваша заявка №{obj.id} обновлена!\n\n"
+                        f"⚡️ Новый статус: <b>{obj.get_status_display()}</b>"
+                    )
+                    send_telegram_message(message, chat_id=chat_id)
+
+        super().save_model(request, obj, form, change)
     
 
 
@@ -128,6 +144,18 @@ class TemporaryContactAdmin(admin.ModelAdmin):
     class Meta:
         verbose_name = _("Временный контакт")
         verbose_name_plural = _("Временные контакты")
+
+
+@admin.register(Segment)
+class SegmanrAdmin(admin.ModelAdmin):
+    list_display = ("id", "title") 
+    search_fields = ("title", )
+    list_display_links = ("id", "title")
+    readonly_fields = ("created_at", "updated_at")
+    
+    class Meta:
+        verbose_name = _("Сегмент")
+        verbose_name_plural = _("Сегмент")
 
 
 @admin.register(UserApply)

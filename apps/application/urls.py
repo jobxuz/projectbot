@@ -12,5 +12,6 @@ urlpatterns = [
     path("bot-user/", include("apps.application.api_endpoint.BotUser.urls")),
     path("package/", include("apps.application.api_endpoint.Package.urls")),
     path("offer/", include("apps.application.api_endpoint.Offer.urls")),
+    path("segment/", include("apps.application.api_endpoint.Segment.urls")),
 
 ]

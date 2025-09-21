@@ -32,6 +32,20 @@ class BotUser(models.Model):
     class Meta:
         verbose_name = _("Пользователь бота")
         verbose_name_plural = _("Пользователи бота")
+    
+    def __str__(self):
+        return f"{self.telegram_id}"
+
+
+class Segment(BaseModel):
+    title = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.title
+    
+    class Meta:
+        verbose_name = _("Сегмент")
+        verbose_name_plural = _("Сегмент")
 
 
 class Manufacturer(BaseModel):
@@ -46,7 +60,7 @@ class Manufacturer(BaseModel):
     full_name = models.CharField(max_length=255, verbose_name=_("Ф.И.О"))
     position = models.CharField(max_length=100, verbose_name=_("Должность"))
     min_order_quantity = models.CharField(max_length=100, verbose_name=_("Минимальный объем заказа"))
-    product_segment = models.CharField(max_length=100, verbose_name=_("Сегмент продукции"))
+    product_segment = models.ManyToManyField(Segment, verbose_name=_("Сегмент продукции"))
     commercial_offer_text = models.TextField(verbose_name=_("Коммерческое предложение"))
     commercial_offer = models.FileField(
         upload_to="offers/",

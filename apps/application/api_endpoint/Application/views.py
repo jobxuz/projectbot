@@ -17,39 +17,39 @@ class ApplicationCreateAPIView(CreateAPIView):
         application = serializer.save()
 
         fields = {
-            "👤 User": application.user,
-            "🏭 Manufacturer": application.manufacturer,
-            "👥 Customer": application.customer,
-            "🛎 Service": application.service,
-            "📦 Package": application.package,
-            "📊 Segment": application.segment,
-            "🎯 Work purpose": application.work_purpose,
-            "🏭 Interested factories": application.interested_factories,
-            "🔢 Quantity to see": application.quantity_to_see,
-            "📅 Planned stay days": application.planned_stay_days,
-            "📆 Planned arrival dates": application.planned_arrival_dates,
-            "🗺 Needs tourist program": application.needs_tourist_program,
-            "📦 Product description": application.product_description,
-            "📐 Order volume": application.order_volume,
-            "⏳ Delivery time": application.production_delivery_time,
-            "⚙️ Special requirements": application.special_requirements,
-            "💰 Budget": application.budget_estimated_price,
-            "📂 Segment category": application.segment_category,
-            "📝 Notes": application.additional_notes,
-            "📞 Phone": application.contact_phone,
-            "📧 Email": application.contact_email,
-            "⚡️ Status": application.get_status_display(),
+            "👤 Пользователь": application.user.telegram_id,
+            "🏭 Производитель": application.manufacturer,
+            "👥 Заказчик": application.customer,
+            "🛎 Услуга": application.service,
+            "📦 Пакет": application.package,
+            "📊 Сегмент": application.segment,
+            "🎯 Цель труда": application.work_purpose,
+            "🏭 Интересующие фабрики": application.interested_factories,
+            "🔢 Количество к просмотру": application.quantity_to_see,
+            "📅 Планируемые дни пребывания": application.planned_stay_days,
+            "📆 Планируемые даты приезда": application.planned_arrival_dates,
+            "🗺 Нужна туристическая программа": application.needs_tourist_program,
+            "📦 Описание продукта": application.product_description,
+            "📐 Объем заказа": application.order_volume,
+            "⏳ Срок производства и доставки": application.production_delivery_time,
+            "⚙️ Специальные требования": application.special_requirements,
+            "💰 Бюджет / примерная цена": application.budget_estimated_price,
+            "📂 Сегмент / категория": application.segment_category,
+            "📝 Дополнительная информация": application.additional_notes,
+            "📞 Контактный телефон": application.contact_phone,
+            "📧 Email адрес": application.contact_email,
+            "⚡️ Статус": application.get_status_display(),
         }
 
-        text_lines = ["📌 <b>Yangi Application</b>\n"]
+        text_lines = ["📌 <b>Новая заявка</b>\n"]
         for label, value in fields.items():
             if value not in [None, "", []]:
                 text_lines.append(f"{label}: {value}")
 
         message = "\n".join(text_lines)
 
-        
         send_telegram_message(message)
+
     
     
 @extend_schema(tags=["Application"])
