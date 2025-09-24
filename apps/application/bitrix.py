@@ -5,8 +5,8 @@ import itertools
 class Bitrix24:
 
     def __init__(self):
-        domain = "b24-v50vg5.bitrix24.ru"
-        token = "63h82dwr6zmy8xus"
+        domain = "b24-v1q4sd.bitrix24.ru"
+        token = "8tv829358xk72d5p"
         self.base_url = f"https://{domain}/rest/1/{token}/"
 
 
