@@ -125,7 +125,7 @@ class Customer(BaseModel):
         max_length=100,
         verbose_name=_("Годовой объем заказов")
     )
-    segment = models.CharField(max_length=100, verbose_name=_("Сегмент"))
+    segment = models.ManyToManyField(Segment, verbose_name=_("Сегмент"))
     cooperation_terms = models.CharField(
         max_length=250,
         verbose_name=_("Условия сотрудничества (Incoterms)")
