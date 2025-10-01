@@ -87,11 +87,7 @@ class Manufacturer(BaseModel):
     has_credit_load = models.BooleanField(verbose_name=_("Есть ли кредитная нагрузка"))
     organization_structure = models.TextField(verbose_name=_("Организационная структура"))
     equipment_info = models.TextField(verbose_name=_("Информация об оборудовании"))
-    certificate = models.FileField(
-        upload_to="offers/",
-        verbose_name=_("Сертификат"),
-        null=True, blank=True
-    )
+    sertificates = models.ManyToManyField("ManufacturerSertificate", verbose_name=_("Сертификаты"), blank=True)
     phone = models.CharField(max_length=30, null=True, blank=True, verbose_name=_("Телефон"))
     status = models.CharField(
         max_length=20,
@@ -108,6 +104,17 @@ class Manufacturer(BaseModel):
         default_related_name='manufacturers'
         verbose_name = _("Производитель")
         verbose_name_plural = _("Производители")
+        
+        
+class ManufacturerSertificate(BaseModel):
+    certificate = models.FileField(upload_to="certificates/", verbose_name=_("Сертификат"))
+    certificate_received_date = models.DateField(null=True, blank=True, verbose_name=_("Дата получения сертификата"))
+    certificate_expiration_date = models.DateField(null=True, blank=True, verbose_name=_("Дата истечения сертификата"))
+    
+    class Meta:
+        default_related_name='manufacturer_certificates'
+        verbose_name = _("Сертификат производителя")
+        verbose_name_plural = _("Сертификаты производителей")
 
 
 class Customer(BaseModel):
@@ -174,6 +181,7 @@ class AdditionalService(BaseModel):
     name = models.CharField(max_length=255, verbose_name=_("Название"))
     description = models.TextField(blank=True, null=True, verbose_name=_("Описание"))
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("Цена"))
+    offerta_file = models.FileField(upload_to="offerta/", null=True, blank=True, verbose_name=_("Файл оферты"))
     payment_type = models.CharField(max_length=20, choices=PaymentType.choices, default=PaymentType.ONE_TIME, verbose_name=_("Тип оплаты"))
     is_active = models.BooleanField(default=True, verbose_name=_("Активен"))
     order = models.IntegerField(default=0, verbose_name=_("Порядковый номер"))
@@ -201,6 +209,7 @@ class Package(BaseModel):
     description = models.TextField(verbose_name=_("Описание"), null=True, blank=True)
     banner = models.ImageField(upload_to='packages/', verbose_name=_("Баннер"), null=True, blank=True)
     order = models.IntegerField(default=0, verbose_name=_("Порядковый номер"))
+    contact_manager = models.CharField(max_length=100, null=True, blank=True, verbose_name=_("Контактный менеджер"))
     
     class Meta:
         verbose_name = _("Пакет")
@@ -233,6 +242,12 @@ class Application(BaseModel):
     service = models.ForeignKey(AdditionalService, on_delete=models.CASCADE, null=True, blank=True, verbose_name=_("Услуга"))
     package = models.ForeignKey(Package, on_delete=models.CASCADE, null=True, blank=True, verbose_name=_("Пакет"))
     
+    looking_for_production = models.TextField(null=True, blank=True, verbose_name=_("Ищу производство"))
+    manufacturer_requirements = models.TextField(null=True, blank=True, verbose_name=_("Требование к производителю"))
+    sample_photo = models.ImageField(upload_to="samples/", null=True, blank=True, verbose_name=_("Фото образца"))
+    execution_terms = models.CharField(max_length=255, null=True, blank=True, verbose_name=_("Сроки исполнения"))
+    payment_terms = models.TextField(null=True, blank=True, verbose_name=_("Условия оплаты"))
+    
     # Factory visit fields
     segment = models.CharField(max_length=255, null=True, blank=True, verbose_name=_("Сегмент"))
     work_purpose = models.TextField(null=True, blank=True, verbose_name=_("Цель труда"))
@@ -249,6 +264,9 @@ class Application(BaseModel):
     special_requirements = models.TextField(null=True, blank=True, verbose_name=_("Специальные требования"))
     budget_estimated_price = models.CharField(max_length=255, null=True, blank=True, verbose_name=_("Бюджет или примерная цена"))
     segment_category = models.CharField(max_length=255, null=True, blank=True, verbose_name=_("Сегмент/категория"))
+    
+    full_name = models.CharField(max_length=100, null=True, blank=True, verbose_name=_("Ф.И.О"))
+    company_name = models.CharField(max_length=100, null=True, blank=True, verbose_name=_("Название компании"))
     
     # Additional information
     additional_notes = models.TextField(null=True, blank=True, verbose_name=_("Дополнительная информация"))

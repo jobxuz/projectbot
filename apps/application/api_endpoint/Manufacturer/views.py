@@ -27,8 +27,13 @@ class ManufacturerListAPIView(generics.ListAPIView):
     search_fields = ["company_name", "full_name", "position", "min_order_quantity", "product_segment", "commercial_offer_text"]
     ordering_fields = ["created_at", "order"]
 
+
 @extend_schema(tags=["Manufacturer"])
 class ManufacturerDetailAPIView(generics.RetrieveAPIView):
-    queryset = Manufacturer.objects.all()
+    queryset = Manufacturer.objects.prefetch_related('manufacturer_certificates')
     serializer_class = ManufacturerDetailSerializer
-    lookup_field = "id" 
+    
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context

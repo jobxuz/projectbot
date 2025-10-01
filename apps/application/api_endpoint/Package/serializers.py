@@ -5,7 +5,7 @@ from apps.application.models import Package, PackageItem
 class PackageListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Package
-        fields = ["id", "name", "banner", "description", 'order']
+        fields = "__all__"
         
         
 class PackageItemListSerializer(serializers.ModelSerializer):
@@ -19,4 +19,4 @@ class PackageDetailSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Package
-        fields = ["id", "name", "banner", "description", 'order', 'items']
+        fields = "__all__"

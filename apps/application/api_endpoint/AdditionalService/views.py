@@ -15,15 +15,11 @@ class AdditionalServiceListAPIView(ListAPIView):
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ['name']
     filterset_fields = ['type', 'option']
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        user_id = self.request.query_params.get('user_id')
-        if user_id:
-            queryset = queryset.annotate(
-                is_apply=Exists(UserApply.objects.filter(service_id=OuterRef('id'), user_id=user_id))
-            )
-        return queryset
+    
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
 
 @extend_schema(tags=["Service"])
 class AdditionalServiceApplyAPIView(CreateAPIView):
