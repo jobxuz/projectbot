@@ -6,7 +6,7 @@ from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, Ou
 from apps.application.utils import send_telegram_message
 from .models import (
     Manufacturer, Customer, AdditionalService, Application, Offer, Segment, 
-    TemporaryContact, BotUser, Slider, Package, PackageItem, UserApply
+    TemporaryContact, BotUser, Slider, Package, PackageItem, UserApply, ManufacturerSertificate
 )
 
 admin.site.unregister(Group)
@@ -14,6 +14,11 @@ admin.site.unregister(Group)
 admin.site.site_header = _("Администрация")
 admin.site.index_title = _("Панель управления")
 
+
+class ManufacturerSertificateInline(admin.TabularInline):
+    model = ManufacturerSertificate
+    extra = 1
+    fields = ('certificate', 'certificate_received_date', 'certificate_expiration_date')
 
 
 @admin.register(Manufacturer)
@@ -23,6 +28,7 @@ class ManufacturerAdmin(admin.ModelAdmin):
     list_filter = ("status", "created_at")
     list_display_links = ("id", "full_name")
     readonly_fields = ("created_at", "updated_at")
+    inlines = [ManufacturerSertificateInline]
     
     class Meta:
         verbose_name = _("Производитель")

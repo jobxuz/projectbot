@@ -1,7 +1,7 @@
 from rest_framework import generics
-from apps.application.models import Manufacturer
+from apps.application.models import Manufacturer, ManufacturerSertificate
 from apps.application.tasks import send_manufacturer_to_bitrix
-from .serializers import ManufacturerCreateSerializer, ManufacturerDetailSerializer, ManufacturerListSerializer
+from .serializers import ManufacturerCreateSerializer, ManufacturerDetailSerializer, ManufacturerListSerializer, ManufacturerCertificateSerializer
 from drf_spectacular.utils import extend_schema
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
@@ -37,3 +37,9 @@ class ManufacturerDetailAPIView(generics.RetrieveAPIView):
         context = super().get_serializer_context()
         context['request'] = self.request
         return context
+    
+    
+@extend_schema(tags=["Manufacturer"])
+class ManufacturerCertificateAPIView(generics.CreateAPIView):
+    queryset = ManufacturerSertificate.objects.all()
+    serializer_class = ManufacturerCertificateSerializer
