@@ -1,4 +1,5 @@
 from ast import mod
+import os
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -110,6 +111,16 @@ class ManufacturerSertificate(BaseModel):
     certificate = models.FileField(upload_to="certificates/", verbose_name=_("Сертификат"))
     certificate_received_date = models.DateField(null=True, blank=True, verbose_name=_("Дата получения сертификата"))
     certificate_expiration_date = models.DateField(null=True, blank=True, verbose_name=_("Дата истечения сертификата"))
+    
+    def __str__(self):
+        title = "Certificate: "
+        if self.certificate:
+            title += os.path.basename(self.certificate.name)
+        if self.certificate_received_date:
+            title += f" - {self.certificate_received_date}"
+        if self.certificate_expiration_date:
+            title += f" - {self.certificate_expiration_date}"
+        return title
     
     class Meta:
         default_related_name='manufacturer_certificates'

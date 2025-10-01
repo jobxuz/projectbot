@@ -14,11 +14,17 @@ admin.site.unregister(Group)
 admin.site.site_header = _("Администрация")
 admin.site.index_title = _("Панель управления")
 
-
-class ManufacturerSertificateInline(admin.TabularInline):
-    model = ManufacturerSertificate
-    extra = 1
-    fields = ('certificate', 'certificate_received_date', 'certificate_expiration_date')
+admin.site.register(ManufacturerSertificate)
+class ManufacturerSertificateAdmin(admin.ModelAdmin):
+    list_display = ("id", "certificate", "certificate_received_date", "certificate_expiration_date")
+    search_fields = ("certificate", "certificate_received_date", "certificate_expiration_date")
+    list_filter = ("certificate_received_date", "certificate_expiration_date")
+    list_display_links = ("id", "certificate")
+    readonly_fields = ("created_at", "updated_at")
+    
+    class Meta:
+        verbose_name = _("Сертификат производителя")
+        verbose_name_plural = _("Сертификаты производителей")
 
 
 @admin.register(Manufacturer)
@@ -28,7 +34,6 @@ class ManufacturerAdmin(admin.ModelAdmin):
     list_filter = ("status", "created_at")
     list_display_links = ("id", "full_name")
     readonly_fields = ("created_at", "updated_at")
-    inlines = [ManufacturerSertificateInline]
     
     class Meta:
         verbose_name = _("Производитель")
