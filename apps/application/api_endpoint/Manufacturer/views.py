@@ -1,3 +1,4 @@
+from django.db.models import Prefetch
 from rest_framework import generics
 from apps.application.models import Manufacturer, ManufacturerSertificate
 from apps.application.tasks import send_manufacturer_to_bitrix
@@ -30,7 +31,7 @@ class ManufacturerListAPIView(generics.ListAPIView):
 
 @extend_schema(tags=["Manufacturer"])
 class ManufacturerDetailAPIView(generics.RetrieveAPIView):
-    queryset = Manufacturer.objects.prefetch_related('manufacturer_certificates')
+    queryset = Manufacturer.objects.all()
     serializer_class = ManufacturerDetailSerializer
     
     def get_serializer_context(self):
@@ -38,6 +39,16 @@ class ManufacturerDetailAPIView(generics.RetrieveAPIView):
         context['request'] = self.request
         return context
     
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.prefetch_related(
+            Prefetch(
+                lookup='manufacturer_certificates',
+                queryset=ManufacturerSertificate.objects.all(),
+                to_attr='certificates'
+            )
+        )
+
     
 @extend_schema(tags=["Manufacturer"])
 class ManufacturerCertificateAPIView(generics.CreateAPIView):
