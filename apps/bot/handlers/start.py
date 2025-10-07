@@ -12,18 +12,18 @@ async def command_start_handler(message: Message):
     builder = InlineKeyboardBuilder()
     builder.add(
         InlineKeyboardButton(
-            text="Ochish",
+            text="Открыть",
             web_app={"url": f"https://uztextil.vercel.app"}
         )
     )
     await message.answer(
-        "<b>Assalomu aleykum!</b>\n\n"
-        "Sizni O'zbekistondagi tasdiqlangan,\ntekshirilgan tekstil fabrikalari bo'yicha\n1-raqamli bot kutib oladi.",
+        "<b>Здравствуйте!</b>\n\n"
+        "Вас приветствует бот №1 по проверенным и сертифицированным текстильным фабрикам Узбекистана.",
         parse_mode="HTML"
     )
     await message.answer_photo(
         photo=FSInputFile("welcome.jpg"),
-        caption="Faqat oraliqsiz, ishonchli fabrikalar.\nAgar shartlar bajarilmasa, pulni qaytarib\nberish kafolati mavjud",
+        caption="Только проверенные и надёжные фабрики. Если условия не выполняются, действует гарантия возврата денег.",
         reply_markup=builder.as_markup(),
         parse_mode="HTML"
     )
