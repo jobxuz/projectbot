@@ -21,8 +21,8 @@ class ManufacturerCertificateSerializer(serializers.ModelSerializer):
 
 
 class ManufacturerDetailSerializer(serializers.ModelSerializer):
-    certificates = ManufacturerCertificateSerializer(many=True)
+    sertificates = ManufacturerCertificateSerializer(many=True)
     
     class Meta:
         model = Manufacturer
-        fields = ['id', 'company_name', 'full_name', 'min_order_quantity', 'office_address', 'website', 'has_crm', 'employee_count', 'certificates']
+        fields = ['id', 'company_name', 'full_name', 'min_order_quantity', 'office_address', 'website', 'has_crm', 'employee_count', 'sertificates']
