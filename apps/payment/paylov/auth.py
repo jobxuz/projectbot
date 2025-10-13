@@ -1,0 +1,43 @@
+from typing import Any
+
+import base64
+import binascii
+
+from rest_framework import HTTP_HEADER_ENCODING
+from rest_framework.authentication import get_authorization_header
+
+from payment.paylov.credentials import get_credentials
+
+
+def authentication(request) -> bool:
+    """
+    Authenticate the Paylov request.
+
+    This function authenticates the Paylov request using Basic Authentication.
+
+    Args:
+        request (Request): The HTTP request object.
+
+    Returns:
+        bool: True if the request is authenticated, False otherwise.
+    """
+
+    auth = get_authorization_header(request).split()
+
+    if not auth or auth[0].lower() != b"basic":
+        return False
+
+    if len(auth) != 2:
+        return False
+
+    try:
+        auth_parts = base64.b64decode(auth[1]).decode(HTTP_HEADER_ENCODING).partition(":")
+    except (TypeError, UnicodeDecodeError, binascii.Error):
+        return False
+
+    username, password = auth_parts[0], auth_parts[2]
+    credentials = get_credentials()
+    PAYLOV_USERNAME = credentials['PAYLOV_USERNAME']
+    PAYLOV_PASSWORD = credentials['PAYLOV_PASSWORD']
+
+    return username == PAYLOV_USERNAME and password == PAYLOV_PASSWORD
