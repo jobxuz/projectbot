@@ -18,6 +18,8 @@ def send_manufacturer_to_bitrix(application_id):
         "UF_CRM_FULL_NAME": application.full_name,
         "UF_CRM_TELEGRAM_ID": application.user.telegram_id,
     }
+
+    product_segments = list(application.product_segment.values_list("title", flat=True))
     
     deal_fields = {
         "CATEGORY_ID": 0,
@@ -27,7 +29,7 @@ def send_manufacturer_to_bitrix(application_id):
         "UF_CRM_MARKET_EXPERIENCE": application.market_experience,
         "UF_CRM_POSITION": application.position,
         "UF_CRM_MIN_ORDER_QUANTITY": application.min_order_quantity,
-        "UF_CRM_PRODUCT_SEGMENT": application.product_segment,
+        "UF_CRM_PRODUCT_SEGMENT": product_segments,
         "UF_CRM_COMMERCIAL_OFFER_TEXT": application.commercial_offer_text,
         "UF_CRM_PRODUCTION_ADDRESS": application.production_address,
         "UF_CRM_OFFICE_ADDRESS": application.office_address,
@@ -143,7 +145,7 @@ def send_customer_to_bitrix(application_id):
         "UF_CRM_LEGAL_ADDRESS": application.legal_address,
         "UF_CRM_MARKETPLACE_BRANDS": application.marketplace_brand,
         "UF_CRM_ANNUAL_ORDER_VOLUME": application.annual_order_volume,
-        "UF_CRM_SEGMENT": application.segment,
+        "UF_CRM_SEGMENT": ", ".join(application.segment.values_list("title", flat=True)),
         "UF_CRM_COOPERATION_TERMS": application.cooperation_terms,
         "UF_CRM_PAYMENT_TERMS": application.payment_terms,
   

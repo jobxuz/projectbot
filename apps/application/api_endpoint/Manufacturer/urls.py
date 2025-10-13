@@ -3,7 +3,7 @@ from .views import ManufacturerCreateAPIView, ManufacturerDetailAPIView, Manufac
 
 urlpatterns = [
     path("create/", ManufacturerCreateAPIView.as_view()),
-    path("detail/<int:id>/", ManufacturerDetailAPIView.as_view()),
+    path("detail/<int:pk>/", ManufacturerDetailAPIView.as_view()),
     path("list/", ManufacturerListAPIView.as_view()),
     path("certificate/", ManufacturerCertificateAPIView.as_view()),
 ]
