@@ -17,13 +17,12 @@ async def command_start_handler(message: Message):
         )
     )
     await message.answer(
-        "<b>Здравствуйте!</b>\n\n"
-        "Вас приветствует бот №1 по проверенным и сертифицированным текстильным фабрикам Узбекистана.",
+        "Здравствуйте Вас приветствует texverified - первый телеграмм апп верифицированный текстильных фабрик Узбекистана.",
         parse_mode="HTML"
     )
     await message.answer_photo(
         photo=FSInputFile("welcome.jpg"),
-        caption="Только проверенные и надёжные фабрики. Если условия не выполняются, действует гарантия возврата денег.",
+        caption="Тут вы найдете только проверенных производителей по нужному Вам сегменту.",
         reply_markup=builder.as_markup(),
         parse_mode="HTML"
     )
