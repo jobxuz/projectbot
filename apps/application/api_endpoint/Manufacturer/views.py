@@ -25,7 +25,7 @@ class ManufacturerListAPIView(generics.ListAPIView):
     serializer_class = ManufacturerListSerializer
     filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
     filterset_fields = ["min_order_quantity", "product_segment"]
-    search_fields = ["company_name", "full_name", "position", "min_order_quantity", "product_segment", "commercial_offer_text"]
+    search_fields = ["company_name", "full_name", "position", "commercial_offer_text"]
     ordering_fields = ["created_at", "order"]
 
 
