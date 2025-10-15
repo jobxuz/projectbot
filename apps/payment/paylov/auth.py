@@ -6,7 +6,7 @@ import binascii
 from rest_framework import HTTP_HEADER_ENCODING
 from rest_framework.authentication import get_authorization_header
 
-from payment.paylov.credentials import get_credentials
+from apps.payment.paylov.credentials import get_credentials
 
 
 def authentication(request) -> bool:

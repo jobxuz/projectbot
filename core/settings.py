@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "apps.user",
     "apps.application",
     "apps.bot",
+    "apps.payment",
 
     'rest_framework',
     # 'rest_framework_simplejwt.token_blacklist',

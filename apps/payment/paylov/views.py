@@ -6,11 +6,11 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from payment.models import Transaction, Providers
-from payment.paylov.auth import authentication as paylov_auth
-from payment.paylov.client import PaylovClient
-from payment.paylov.methods import PaylovMethods
-from payment.paylov.serializers import PaylovSerializer
+from apps.payment.models import ProviderChoices, Transaction
+from apps.payment.paylov.auth import authentication as paylov_auth
+from apps.payment.paylov.client import PaylovClient
+from apps.payment.paylov.methods import PaylovMethods
+from apps.payment.paylov.serializers import PaylovSerializer
 
 
 class PaylovAPIView(APIView):
@@ -94,7 +94,7 @@ class PaylovAPIView(APIView):
 
         transaction = Transaction.objects.get(
             id=self.params["account"]["order_id"],
-            provider=Providers.ProviderChoices.PAYLOV
+            provider=ProviderChoices.PAYLOV
         )
 
         if error:
@@ -102,5 +102,5 @@ class PaylovAPIView(APIView):
             transaction.save(update_fields=["status"])
             return dict(result=dict(status=code, statusText=PaylovClient.STATUS_TEXT["ERROR"]))
 
-        transaction.apply_transaction(provider=Providers.ProviderChoices.PAYLOV)
+        transaction.apply_transaction(provider=ProviderChoices.PAYLOV)
         return dict(result=dict(status=code, statusText=PaylovClient.STATUS_TEXT["SUCCESS"]))

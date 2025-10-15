@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from payment.paylov.methods import PaylovMethods
+from apps.payment.paylov.methods import PaylovMethods
 
 
 class PaylovSerializer(serializers.Serializer):

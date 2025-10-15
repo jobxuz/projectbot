@@ -1,3 +1,6 @@
+from typing import Any
+
+
 class PaylovBadResponseException(Exception):
     """
     Exception raised for a bad response from the Paylov service.

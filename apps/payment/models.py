@@ -1,10 +1,9 @@
 import datetime
 from django.db import models
 
-from payment import managers
-from django.contrib.auth import get_user_model
+from apps.application.models import BotUser, AdditionalService
+from apps.payment import managers
 
-User = get_user_model()
 
 class ProviderChoices(models.TextChoices):
     PAYLOV = "paylov", "Paylov"
@@ -19,7 +18,7 @@ class Transaction(models.Model):
         FAILED = "failed", "Failed"
         CANCELLED = "cancelled", "Cancelled"
 
-    user = models.ForeignKey(User, related_name="orders", on_delete=models.PROTECT)
+    user = models.ForeignKey(BotUser, related_name="orders", on_delete=models.PROTECT)
     provider = models.CharField(choices=ProviderChoices.choices, max_length=15, default=ProviderChoices.PAYLOV)
     status = models.CharField(choices=TransactionStatus.choices, max_length=15, default=TransactionStatus.WAITING)
     amount = models.PositiveIntegerField()
@@ -32,7 +31,9 @@ class Transaction(models.Model):
     reference = models.TextField(null=True, blank=True)
     transaction_id = models.CharField(max_length=512, null=True, blank=True)
     is_paid_with_card = models.BooleanField(default=False)
-    card = models.ForeignKey("payment.UserCard", null=True, blank=True, on_delete=models.PROTECT)
+    additional_service = models.ForeignKey(AdditionalService, null=True, blank=True, on_delete=models.SET_NULL)
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
 
     extra = models.JSONField(null=True, blank=True)
 
@@ -62,11 +63,10 @@ class Transaction(models.Model):
         self.paid_at = datetime.datetime.now()
         self.status = self.TransactionStatus.SUCCESS
         self.is_paid_with_card = is_paid_with_card
-        self.card = card
-        self.save(update_fields=["paid_at", "status", "transaction_id", "provider", "is_paid_with_card", "card"])
+        self.save(update_fields=["paid_at", "status", "transaction_id", "provider", "is_paid_with_card"])
 
-        self.order.is_paid = True
-        self.order.save(update_fields=["is_paid"])
+        # self.order.is_paid = True
+        # self.order.save(update_fields=["is_paid"])
 
     def cancel_transaction(self, reason):
         self.cancelled_at = datetime.datetime.now()
@@ -74,49 +74,7 @@ class Transaction(models.Model):
         self.extra = {"payme_cancel_reason": reason}
         self.save(update_fields=["cancelled_at", "status", "extra"])
 
-        self.order.is_paid = False
-        self.order.save(update_fields=["is_paid"])
+        # self.order.is_paid = False
+        # self.order.save(update_fields=["is_paid"])
 
         return self
-
-
-class UserCard(models.Model):
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="cards")
-    card_number = models.CharField(max_length=255, )
-    expire_date = models.CharField(max_length=255, )
-    card_id = models.CharField(max_length=255, )
-    token = models.CharField(max_length=255, null=True)
-    provider = models.CharField(choices=ProviderChoices.choices, max_length=15, default=ProviderChoices.PAYLOV)
-    confirmed = models.BooleanField(default=False, )
-    is_deleted = models.BooleanField(default=False, editable=False)
-
-    objects = managers.UserCardManager()
-
-    def soft_delete(self):
-        self.card_number = f"{self.card_number}_{self.card_id}_deleted"
-        self.is_deleted = True
-        self.save(update_fields=["card_number", "is_deleted"])
-
-    @property
-    def title(self):
-        card_number = self.card_number
-        if self.is_deleted:
-            card_number = self.card_number.split("_")[0]
-        return f'{card_number[:4]} **** **** {card_number[-4:]}'
-
-    @property
-    def exp_date(self):
-        expire_date = str(self.expire_date)
-        return f"{expire_date[2:]}/{expire_date[:2]}"
-
-    class Meta:
-        unique_together = ("user", "card_number")
-
-
-class PaymentProvider(models.Model):
-    provider = models.CharField(max_length=32, verbose_name="Provider", choices=ProviderChoices.choices)
-    icon = models.FileField(upload_to="providers/", null=True, blank=True)
-    title = models.CharField(max_length=255, verbose_name="Title", null=True, blank=True)
-
-    def __str__(self):
-        return self.title
