@@ -11,7 +11,7 @@ class ManufacturerCreateSerializer(serializers.ModelSerializer):
 class ManufacturerListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Manufacturer
-        fields = ['id', 'company_name', 'full_name', 'product_segment']
+        fields = ['id', 'company_name', 'full_name']
         
         
 class ManufacturerCertificateSerializer(serializers.ModelSerializer):
