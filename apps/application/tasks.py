@@ -144,9 +144,7 @@ def send_customer_to_bitrix(application_id):
         "UF_CRM_WEBSITE": application.website,
         "UF_CRM_LEGAL_ADDRESS": application.legal_address,
         "UF_CRM_MARKETPLACE_BRANDS": application.marketplace_brand,
-        "UF_CRM_ANNUAL_ORDER_VOLUME": application.annual_order_volume,
         "UF_CRM_SEGMENT": ", ".join(application.segment.values_list("title", flat=True)),
-        "UF_CRM_COOPERATION_TERMS": application.cooperation_terms,
         "UF_CRM_PAYMENT_TERMS": application.payment_terms,
   
     }

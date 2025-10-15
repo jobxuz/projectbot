@@ -139,15 +139,7 @@ class Customer(BaseModel):
         max_length=255,
         verbose_name=_("Бренд на маркетплейсах")
     )
-    annual_order_volume = models.CharField(
-        max_length=100,
-        verbose_name=_("Годовой объем заказов")
-    )
     segment = models.ManyToManyField(Segment, verbose_name=_("Сегмент"))
-    cooperation_terms = models.CharField(
-        max_length=250,
-        verbose_name=_("Условия сотрудничества (Incoterms)")
-    )
     payment_terms = models.CharField(max_length=250, verbose_name=_("Условия оплаты"))
     phone = models.CharField(max_length=30, null=True, blank=True, verbose_name=_("Телефон"))
     total_orders = models.IntegerField(default=0, verbose_name=_("Всего заказов"))
@@ -177,6 +169,7 @@ class ServiceOption(models.TextChoices):
 
 
 class PaymentType(models.TextChoices):
+    FREE = "free", _("Бесплатно")
     ONE_TIME = "one_time", _("Одноразовая оплата")
     MONTHLY = "monthly", _("Ежемесячная оплата")
 
