@@ -43,6 +43,7 @@ class ManufacturerDetailAPIView(generics.RetrieveAPIView):
     def get_queryset(self):
         queryset = super().get_queryset()
         return queryset.prefetch_related(
+            'product_segment',
             Prefetch(
                 lookup='sertificates',
                 queryset=ManufacturerSertificate.objects.all(),

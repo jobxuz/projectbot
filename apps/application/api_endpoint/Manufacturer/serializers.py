@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from apps.application.models import Manufacturer, ManufacturerSertificate
+from apps.application.api_endpoint.Segment.serializers import SegmentListSerializer
 
 
 class ManufacturerCreateSerializer(serializers.ModelSerializer):
@@ -22,7 +23,8 @@ class ManufacturerCertificateSerializer(serializers.ModelSerializer):
 
 class ManufacturerDetailSerializer(serializers.ModelSerializer):
     sertificates = ManufacturerCertificateSerializer(many=True)
+    product_segment = SegmentListSerializer(many=True)
     
     class Meta:
         model = Manufacturer
-        fields = ['id', 'company_name', 'full_name', 'min_order_quantity', 'office_address', 'website', 'has_crm', 'employee_count', 'sertificates']
+        fields = ['id', 'company_name', 'full_name', 'min_order_quantity', 'office_address', 'website', 'has_crm', 'employee_count', 'sertificates', 'product_segment']
