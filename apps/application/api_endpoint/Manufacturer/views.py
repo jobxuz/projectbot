@@ -3,6 +3,7 @@ from rest_framework import generics
 from apps.application.models import Manufacturer, ManufacturerSertificate
 from apps.application.tasks import send_manufacturer_to_bitrix
 from .serializers import ManufacturerCreateSerializer, ManufacturerDetailSerializer, ManufacturerListSerializer, ManufacturerCertificateSerializer
+from .filters import ManufacturerFilterSet
 from drf_spectacular.utils import extend_schema
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
@@ -24,8 +25,8 @@ class ManufacturerListAPIView(generics.ListAPIView):
     queryset = Manufacturer.objects.all()
     serializer_class = ManufacturerListSerializer
     filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
-    filterset_fields = ["min_order_quantity", "product_segment"]
-    search_fields = ["company_name", "full_name", "position", "min_order_quantity", "product_segment", "commercial_offer_text"]
+    filterset_class = ManufacturerFilterSet
+    search_fields = ["company_name", "full_name", "position", "commercial_offer_text"]
     ordering_fields = ["created_at", "order"]
 
 
@@ -42,6 +43,7 @@ class ManufacturerDetailAPIView(generics.RetrieveAPIView):
     def get_queryset(self):
         queryset = super().get_queryset()
         return queryset.prefetch_related(
+            'product_segment',
             Prefetch(
                 lookup='sertificates',
                 queryset=ManufacturerSertificate.objects.all(),
