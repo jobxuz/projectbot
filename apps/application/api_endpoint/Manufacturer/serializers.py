@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from apps.application.models import Manufacturer, ManufacturerSertificate
-from apps.application.api_endpoint.Segment.serializers import SegmentListSerializer
 
 
 class ManufacturerCreateSerializer(serializers.ModelSerializer):
@@ -22,6 +21,7 @@ class ManufacturerCertificateSerializer(serializers.ModelSerializer):
 
 
 class ManufacturerDetailSerializer(serializers.ModelSerializer):
+    from apps.application.api_endpoint.Segment.serializers import SegmentListSerializer
     sertificates = ManufacturerCertificateSerializer(many=True)
     product_segment = SegmentListSerializer(many=True)
     
