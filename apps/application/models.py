@@ -54,6 +54,7 @@ class Manufacturer(BaseModel):
         IN_PROGRESS = "in_progress", _("В процессе")
         APPROVED = "approved", _("Одобрено")
         PAID = "paid", _("Оплачено")
+        CANCELED = "canceled", _("Отменено")
 
     user = models.OneToOneField(BotUser, on_delete=models.CASCADE, verbose_name=_("Пользователь"))
     company_name = models.CharField(max_length=255, verbose_name=_("Название компании"))

@@ -1,6 +1,9 @@
 from celery import shared_task
 import logging
 import re
+from django.conf import settings
+
+import requests
 
 from apps.application.bitrix import Bitrix24
 from .models import Customer, Manufacturer, TemporaryContact
@@ -225,3 +228,56 @@ def send_customer_to_bitrix(application_id):
     except Exception as e:
         print(e)
     
+
+
+
+@shared_task(bind=True, max_retries=3)
+def send_status_change_message_task(self, manufacturer_id, new_status):
+   
+    try:
+        manufacturer = Manufacturer.objects.select_related('user').get(id=manufacturer_id)
+        telegram_id = manufacturer.user.telegram_id
+        if not telegram_id:
+            return
+
+        if new_status == Manufacturer.StatusChoices.APPROVED:
+            message = (
+                f"🎉 Поздравляем, {manufacturer.full_name}!\n\n"
+                f"Ваша компания <b>{manufacturer.company_name}</b> успешно прошла проверку и "
+                f"добавлена в список <b>надёжных производителей</b>.\n\n"
+                f"📋 Статус заявки: <b>Одобрено</b>\n"
+                f"Спасибо за доверие и желаем дальнейших успехов! 🚀"
+            )
+
+        elif new_status == Manufacturer.StatusChoices.PAID:
+            message = (
+                f"💰 Уважаемый(ая) {manufacturer.full_name}, мы получили оплату от вашей компании <b>{manufacturer.company_name}</b>.\n\n"
+                f"Ваш платёж успешно подтверждён, и доступ к дополнительным возможностям активирован! ✅\n\n"
+                f"📋 Статус заявки: <b>Оплачено</b>\n"
+                f"Благодарим за сотрудничество и желаем процветания вашему бизнесу! 🌟"
+            )
+
+        elif new_status == Manufacturer.StatusChoices.CANCELED:
+            message = (
+                f"⚠️ Уважаемый(ая) {manufacturer.full_name}, к сожалению, в вашей заявке были обнаружены некоторые неточности.\n\n"
+                f"Пожалуйста, проверьте введённые данные и отправьте заявку повторно.\n\n"
+                f"📋 Статус заявки: <b>Отменено</b>\n"
+                f"Если у вас возникли вопросы, наша команда поддержки всегда готова помочь 🤝"
+            )
+
+        else:
+            return
+
+        token = settings.BOT_TOKEN  
+        if not token:
+            raise ValueError("BOT_TOKEN не найден в настройках. Проверьте .env файл.")
+
+        url = f"https://api.telegram.org/bot{token}/sendMessage"
+        requests.post(url, data={
+            "chat_id": telegram_id,
+            "text": message,
+            "parse_mode": "HTML"
+        })
+
+    except Exception as exc:
+        self.retry(exc=exc, countdown=10)
