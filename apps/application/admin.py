@@ -26,6 +26,7 @@ class ManufacturerSertificateAdmin(admin.ModelAdmin):
         verbose_name = _("Сертификат производителя")
         verbose_name_plural = _("Сертификаты производителей")
 
+from django.utils.html import format_html
 
 @admin.register(Manufacturer)
 class ManufacturerAdmin(admin.ModelAdmin):
@@ -34,6 +35,24 @@ class ManufacturerAdmin(admin.ModelAdmin):
     list_filter = ("status", "created_at")
     list_display_links = ("id", "full_name")
     readonly_fields = ("created_at", "updated_at")
+
+    readonly_fields = ("created_at", "updated_at", "view_certificates")
+
+
+    def view_certificates(self, obj):
+        """Admin ichida sertifikat fayllarini ko‘rsatish uchun custom maydon."""
+        if not obj.sertificates.exists():
+            return "Нет сертификатов"
+
+        links = []
+        for cert in obj.sertificates.all():
+            if cert.certificate:
+                links.append(
+                    f"<a href='{cert.certificate.url}' target='_blank'>📄 {cert.certificate.name.split('/')[-1]}</a>"
+                )
+        return format_html("<br>".join(links))
+
+    view_certificates.short_description = "Сертификаты производителя"
     
     class Meta:
         verbose_name = _("Производитель")
