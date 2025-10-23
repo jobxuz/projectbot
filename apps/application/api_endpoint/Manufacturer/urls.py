@@ -1,9 +1,10 @@
 from django.urls import path
-from .views import ManufacturerCreateAPIView, ManufacturerDetailAPIView, ManufacturerListAPIView, ManufacturerCertificateAPIView
+from . import views
 
 urlpatterns = [
-    path("create/", ManufacturerCreateAPIView.as_view()),
-    path("detail/<int:pk>/", ManufacturerDetailAPIView.as_view()),
-    path("list/", ManufacturerListAPIView.as_view()),
-    path("certificate/", ManufacturerCertificateAPIView.as_view()),
+    path("create/", views.ManufacturerCreateAPIView.as_view()),
+    path("detail/<int:pk>/", views.ManufacturerDetailAPIView.as_view()),
+    path("list/", views.ManufacturerListAPIView.as_view()),
+    path("certificate/", views.ManufacturerCertificateAPIView.as_view()),
+    path("company-image/", views.ManufacturerCompanyImageAPIView.as_view()),
 ]

@@ -99,6 +99,14 @@ class Manufacturer(BaseModel):
     )
     order = models.IntegerField(default=0, verbose_name=_("Порядковый номер"))
 
+    company_images = models.ManyToManyField("ManufacturerCompanyImage", verbose_name=_("Изображение компании"), blank=True)
+
+    logo = models.ImageField(
+        upload_to="logos/",
+        verbose_name=_("Логотип компании"),
+        null=True, blank=True
+    )
+
     def __str__(self):
         return f"{self.user.telegram_id}"
 
@@ -127,6 +135,25 @@ class ManufacturerSertificate(BaseModel):
         default_related_name='manufacturer_certificates'
         verbose_name = _("Сертификат производителя")
         verbose_name_plural = _("Сертификаты производителей")
+
+
+class ManufacturerCompanyImage(BaseModel):
+    image = models.ImageField(
+        upload_to="company_images/",
+        verbose_name=_("Изображение компании")
+    )
+
+    def __str__(self):
+        title = "Certificate: "
+        if self.image:
+            title += os.path.basename(self.image.name)
+
+        return title
+
+    class Meta:
+        default_related_name='manufacturer_company_image'
+        verbose_name = _("Изображение компании")
+        verbose_name_plural = _("Изображения компании")
 
 
 class Customer(BaseModel):

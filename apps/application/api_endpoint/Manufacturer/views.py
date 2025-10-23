@@ -1,8 +1,8 @@
 from django.db.models import Prefetch
 from rest_framework import generics
-from apps.application.models import Manufacturer, ManufacturerSertificate
+from apps.application.models import Manufacturer, ManufacturerCompanyImage, ManufacturerSertificate
 from apps.application.tasks import send_manufacturer_to_bitrix
-from .serializers import ManufacturerCreateSerializer, ManufacturerDetailSerializer, ManufacturerListSerializer, ManufacturerCertificateSerializer
+from .serializers import ManufacturerCompanyImageSerializer, ManufacturerCreateSerializer, ManufacturerDetailSerializer, ManufacturerListSerializer, ManufacturerCertificateSerializer
 from .filters import ManufacturerFilterSet
 from drf_spectacular.utils import extend_schema
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -48,7 +48,12 @@ class ManufacturerDetailAPIView(generics.RetrieveAPIView):
                 lookup='sertificates',
                 queryset=ManufacturerSertificate.objects.all(),
                 to_attr='certificates_list'
-            )
+            ),
+            Prefetch(
+                lookup="company_images",
+                queryset=ManufacturerCompanyImage.objects.all(),
+                to_attr="company_images_list"
+            ),
         )
 
     
@@ -56,3 +61,11 @@ class ManufacturerDetailAPIView(generics.RetrieveAPIView):
 class ManufacturerCertificateAPIView(generics.CreateAPIView):
     queryset = ManufacturerSertificate.objects.all()
     serializer_class = ManufacturerCertificateSerializer
+
+
+
+
+@extend_schema(tags=["Manufacturer"])
+class ManufacturerCompanyImageAPIView(generics.CreateAPIView):
+    queryset = ManufacturerCompanyImage.objects.all()
+    serializer_class = ManufacturerCompanyImageSerializer

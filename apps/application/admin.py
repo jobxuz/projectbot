@@ -2,10 +2,10 @@ from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import Group
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
-
+from django.utils.html import format_html
 from apps.application.utils import send_telegram_message
 from .models import (
-    Manufacturer, Customer, AdditionalService, Application, Offer, Segment, 
+    Manufacturer, Customer, AdditionalService, Application, ManufacturerCompanyImage, Offer, Segment, 
     TemporaryContact, BotUser, Slider, Package, PackageItem, UserApply, ManufacturerSertificate
 )
 
@@ -26,7 +26,19 @@ class ManufacturerSertificateAdmin(admin.ModelAdmin):
         verbose_name = _("Сертификат производителя")
         verbose_name_plural = _("Сертификаты производителей")
 
-from django.utils.html import format_html
+
+
+admin.site.register(ManufacturerCompanyImage)
+class ManufacturerCompanyImageAdmin(admin.ModelAdmin):
+    list_display = ("id", "image")
+    list_display_links = ("id", "image")
+    readonly_fields = ("created_at", "updated_at")
+    
+    class Meta:
+        verbose_name = _("Сертификат производителя")
+        verbose_name_plural = _("Сертификаты производителей")
+
+
 
 @admin.register(Manufacturer)
 class ManufacturerAdmin(admin.ModelAdmin):
@@ -36,7 +48,7 @@ class ManufacturerAdmin(admin.ModelAdmin):
     list_display_links = ("id", "full_name")
     readonly_fields = ("created_at", "updated_at")
 
-    readonly_fields = ("created_at", "updated_at", "view_certificates")
+    readonly_fields = ("created_at", "updated_at", "view_certificates", "view_company_images")
 
 
     def view_certificates(self, obj):
@@ -51,8 +63,22 @@ class ManufacturerAdmin(admin.ModelAdmin):
                     f"<a href='{cert.certificate.url}' target='_blank'>📄 {cert.certificate.name.split('/')[-1]}</a>"
                 )
         return format_html("<br>".join(links))
+    
+
+    def view_company_images(self, obj):
+        if not obj.company_images.exists():
+            return "Нет Изображение компании"
+
+        links = []
+        for cert in obj.company_images.all():
+            if cert.image:
+                links.append(
+                    f"<a href='{cert.image.url}' target='_blank'>📄 {cert.image.name.split('/')[-1]}</a>"
+                )
+        return format_html("<br>".join(links))
 
     view_certificates.short_description = "Сертификаты производителя"
+    view_company_images.short_description = "Изображение компании производителя"
     
     class Meta:
         verbose_name = _("Производитель")
