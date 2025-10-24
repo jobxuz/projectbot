@@ -396,3 +396,23 @@ class Offer(BaseModel):
     class Meta:
         verbose_name = _("Оффер")
         verbose_name_plural = _("Офферы")
+
+
+
+class ContactSettings(BaseModel):
+    name = models.CharField(
+        max_length=100,
+        verbose_name="Имя оператора"
+    )
+    phone_number = models.CharField(
+        max_length=25,
+        unique=True,
+        verbose_name="Номер телефона"
+    )
+
+    def __str__(self):
+        return f"{self.name} - {self.phone_number}"
+
+    class Meta:
+        verbose_name = "Контактный номер оператора"
+        verbose_name_plural = "Контактные номера операторов"

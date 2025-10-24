@@ -13,6 +13,7 @@ urlpatterns = [
     path("package/", include("apps.application.api_endpoint.Package.urls")),
     path("offer/", include("apps.application.api_endpoint.Offer.urls")),
     path("segment/", include("apps.application.api_endpoint.Segment.urls")),
+    path("contact-settings/", include("apps.application.api_endpoint.ContactSettings.urls")),
     path("paylov/", include("apps.payment.paylov.urls")),
 
 ]

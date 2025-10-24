@@ -5,7 +5,7 @@ from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, Ou
 from django.utils.html import format_html
 from apps.application.utils import send_telegram_message
 from .models import (
-    Manufacturer, Customer, AdditionalService, Application, ManufacturerCompanyImage, Offer, Segment, 
+    ContactSettings, Manufacturer, Customer, AdditionalService, Application, ManufacturerCompanyImage, Offer, Segment, 
     TemporaryContact, BotUser, Slider, Package, PackageItem, UserApply, ManufacturerSertificate
 )
 
@@ -35,8 +35,19 @@ class ManufacturerCompanyImageAdmin(admin.ModelAdmin):
     readonly_fields = ("created_at", "updated_at")
     
     class Meta:
-        verbose_name = _("Сертификат производителя")
-        verbose_name_plural = _("Сертификаты производителей")
+        verbose_name = _("Изображение компании")
+        verbose_name_plural = _("Изображение компании")
+
+
+
+admin.site.register(ContactSettings)
+class ContactSettingsAdmin(admin.ModelAdmin):
+    list_display = ("id", "name", "phone_number")
+    list_display_links = ("id", "name", "phone_number")
+    
+    class Meta:
+        verbose_name = _("Контактный номер оператора")
+        verbose_name_plural = _("Контактный номер оператора")
 
 
 
