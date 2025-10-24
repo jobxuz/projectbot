@@ -28,6 +28,11 @@ class ManufacturerListAPIView(generics.ListAPIView):
     filterset_class = ManufacturerFilterSet
     search_fields = ["company_name", "full_name", "position", "commercial_offer_text"]
     ordering_fields = ["created_at", "order"]
+    
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
 
 
 @extend_schema(tags=["Manufacturer"])
@@ -50,10 +55,10 @@ class ManufacturerDetailAPIView(generics.RetrieveAPIView):
                 to_attr='certificates_list'
             ),
             Prefetch(
-                lookup="company_images",
+                lookup="manufacturer_company_image",
                 queryset=ManufacturerCompanyImage.objects.all(),
-                to_attr="company_images_list"
-            ),
+                to_attr="images"
+            )
         )
 
     

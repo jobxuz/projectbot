@@ -144,7 +144,7 @@ class ManufacturerCompanyImage(BaseModel):
     )
 
     def __str__(self):
-        title = "Certificate: "
+        title = "Image: "
         if self.image:
             title += os.path.basename(self.image.name)
 

@@ -11,7 +11,7 @@ class ManufacturerCreateSerializer(serializers.ModelSerializer):
 class ManufacturerListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Manufacturer
-        fields = ['id', 'company_name', 'full_name']
+        fields = ['id', 'company_name', 'full_name', 'logo']
         
         
 class ManufacturerCertificateSerializer(serializers.ModelSerializer):
@@ -32,7 +32,7 @@ class ManufacturerDetailSerializer(serializers.ModelSerializer):
     from apps.application.api_endpoint.Segment.serializers import SegmentListSerializer
     sertificates = ManufacturerCertificateSerializer(many=True)
     product_segment = SegmentListSerializer(many=True)
-    company_images = ManufacturerCompanyImageSerializer(many=True)
+    images = ManufacturerCompanyImageSerializer(many=True)
     
     class Meta:
         model = Manufacturer
@@ -65,6 +65,6 @@ class ManufacturerDetailSerializer(serializers.ModelSerializer):
             'logo',
             'product_segment',
             'sertificates',
-            'company_images',
+            'images',
 
         ]
