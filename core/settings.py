@@ -200,3 +200,11 @@ JAZZMIN_SETTINGS = {
     "show_ui_builder": True,
     "theme": "slate", 
 }
+
+
+from corsheaders.defaults import default_headers
+
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'Telegram-Id'
+]
