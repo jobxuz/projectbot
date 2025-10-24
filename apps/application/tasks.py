@@ -232,15 +232,23 @@ def send_customer_to_bitrix(application_id):
 
 
 @shared_task(bind=True, max_retries=3)
-def send_status_change_message_task(self, manufacturer_id, new_status):
+def send_status_change_message_task(self, manufacturer_id, new_status, is_created=False):
    
     try:
         manufacturer = Manufacturer.objects.select_related('user').get(id=manufacturer_id)
         telegram_id = manufacturer.user.telegram_id
         if not telegram_id:
             return
+        
+        if is_created:
+            message = (
+                f"📩 Уважаемый(ая) {manufacturer.full_name}!\n\n"
+                f"Ваша заявка от компании <b>{manufacturer.company_name}</b> успешно принята. "
+                f"Наши менеджеры скоро её рассмотрят и свяжутся с вами. 🤝\n\n"
+                f"📋 Статус заявки: <b>В процессе</b>"
+            )
 
-        if new_status == Manufacturer.StatusChoices.APPROVED:
+        elif new_status == Manufacturer.StatusChoices.APPROVED:
             message = (
                 f"🎉 Поздравляем, {manufacturer.full_name}!\n\n"
                 f"Ваша компания <b>{manufacturer.company_name}</b> успешно прошла проверку и "
