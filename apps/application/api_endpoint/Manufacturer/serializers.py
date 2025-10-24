@@ -2,6 +2,13 @@ from rest_framework import serializers
 from apps.application.models import Manufacturer, ManufacturerCompanyImage, ManufacturerSertificate
 
 
+
+class ManufacturerCompanyImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ManufacturerCompanyImage
+        fields = ['id', 'image']
+
+
 class ManufacturerCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Manufacturer
@@ -9,21 +16,16 @@ class ManufacturerCreateSerializer(serializers.ModelSerializer):
 
 
 class ManufacturerListSerializer(serializers.ModelSerializer):
+    images = ManufacturerCompanyImageSerializer(many=True)
+    
     class Meta:
         model = Manufacturer
-        fields = ['id', 'company_name', 'full_name', 'logo']
+        fields = ['id', 'company_name', 'full_name', 'logo', 'images']
         
         
 class ManufacturerCertificateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ManufacturerSertificate
-        fields = '__all__'
-
-
-
-class ManufacturerCompanyImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ManufacturerCompanyImage
         fields = '__all__'
 
 

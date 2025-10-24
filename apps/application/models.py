@@ -90,6 +90,7 @@ class Manufacturer(BaseModel):
     organization_structure = models.TextField(verbose_name=_("Организационная структура"))
     equipment_info = models.TextField(verbose_name=_("Информация об оборудовании"))
     sertificates = models.ManyToManyField("ManufacturerSertificate", verbose_name=_("Сертификаты"), blank=True)
+    images = models.ManyToManyField("ManufacturerCompanyImage", verbose_name=_("Изображения"), blank=True)
     phone = models.CharField(max_length=30, null=True, blank=True, verbose_name=_("Телефон"))
     status = models.CharField(
         max_length=20,
@@ -98,9 +99,6 @@ class Manufacturer(BaseModel):
         verbose_name=_("Статус")
     )
     order = models.IntegerField(default=0, verbose_name=_("Порядковый номер"))
-
-    company_images = models.ManyToManyField("ManufacturerCompanyImage", verbose_name=_("Изображение компании"), blank=True)
-
     logo = models.ImageField(
         upload_to="logos/",
         verbose_name=_("Логотип компании"),

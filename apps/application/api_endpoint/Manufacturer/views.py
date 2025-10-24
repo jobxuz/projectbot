@@ -22,7 +22,7 @@ class ManufacturerCreateAPIView(generics.CreateAPIView):
 
 @extend_schema(tags=["Manufacturer"])
 class ManufacturerListAPIView(generics.ListAPIView):
-    queryset = Manufacturer.objects.all()
+    queryset = Manufacturer.objects.prefetch_related('images').all()
     serializer_class = ManufacturerListSerializer
     filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
     filterset_class = ManufacturerFilterSet
@@ -49,15 +49,11 @@ class ManufacturerDetailAPIView(generics.RetrieveAPIView):
         queryset = super().get_queryset()
         return queryset.prefetch_related(
             'product_segment',
+            'images',
             Prefetch(
                 lookup='sertificates',
                 queryset=ManufacturerSertificate.objects.all(),
                 to_attr='certificates_list'
-            ),
-            Prefetch(
-                lookup="manufacturer_company_image",
-                queryset=ManufacturerCompanyImage.objects.all(),
-                to_attr="images"
             )
         )
 
